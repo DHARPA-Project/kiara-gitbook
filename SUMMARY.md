@@ -1,17 +1,29 @@
 # Table of contents
 
-* [Welcome](README.md)
+## Before you begin
 
-## Getting Started
+* [What is kiara?](README.md)
+* [What can kiara do?](before-you-begin/what-can-kiara-do.md)
+* [Key concepts](before-you-begin/key-concepts.md)
 
-* [Quickstart](getting-started/quickstart.md)
-* [Publish your docs](getting-started/publish-your-docs.md)
+## Installation
 
-## Basics
+* [Mac](installation/mac.md)
+* [Windows](installation/windows.md)
 
-* [Editor](basics/editor.md)
-* [Markdown](basics/markdown.md)
-* [Images & media](basics/images-and-media.md)
-* [Interactive blocks](basics/interactive-blocks.md)
-* [OpenAPI](basics/openapi.md)
-* [Integrations](basics/integrations.md)
+## Using kiara
+
+* [in Jupyter notebooks](using-kiara/in-jupyter-notebooks.md)
+* [in CLI](using-kiara/in-cli.md)
+* [Use case](using-kiara/use-case.md)
+
+## Customisation
+
+* [Creating modules](customisation/creating-modules.md)
+* [Creating plugins](customisation/creating-plugins.md)
+
+## Troubleshooting
+
+* [Versioning](troubleshooting/versioning.md)
+* [Reporting problems](troubleshooting/reporting-problems.md)
+* [Tips for beginners](troubleshooting/tips-for-beginners.md)
