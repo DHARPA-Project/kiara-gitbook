@@ -11,7 +11,7 @@ description: >-
 If you haven't already, install the latest versions of:
 
 * miniconda
-* git
+* Git
 
 > Tip: We recommend using Homebrew or another package manager for installing these.
 
@@ -37,6 +37,8 @@ Use conda to install the necessary packages. For the network analysis modules, y
 conda install networkx
 ```
 
+For the topic modelling modules, you will need...
+
 ### Install \_kiara\_ and its plugins
 
 Use pip to install _kiara_:
@@ -58,4 +60,17 @@ pip install kiara_plugin.core_types kiara_plugin.onboarding kiara_plugin.tabular
 For the network analysis modules, use:
 
 ```⏎
+pip install git+https://github.com/...
+```
+
+For the topic modelling modules, use:
+
+```⏎
+pip install git+https://github.com/...
+```
+
+To check that the modules are successfully installed and see what operations are possible, use:
+
+```⏎
+kiara operation list
 ```
