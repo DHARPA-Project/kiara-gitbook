@@ -1,7 +1,5 @@
 ---
-description: >-
-  Understanding the following core concepts will help you work effectively with
-  kiara:
+description: 'Understanding these core concepts will help you work effectively with kiara:'
 ---
 
 # Key concepts
