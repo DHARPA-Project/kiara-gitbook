@@ -4,6 +4,7 @@
 
 * [What is kiara?](README.md)
 * [What can kiara do?](before-you-begin/what-can-kiara-do.md)
+* [What is data orchestration?](before-you-begin/what-is-data-orchestration.md)
 * [Key concepts](before-you-begin/key-concepts.md)
 
 ## Installation
