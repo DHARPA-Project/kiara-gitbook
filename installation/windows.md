@@ -1,7 +1,7 @@
 ---
 description: >-
-  How to install _kiara_ and its dependencies in a virtual environment for
-  Windows users
+  How to install kiara and its dependencies in a virtual environment for Windows
+  users
 ---
 
 # Windows
@@ -39,7 +39,7 @@ conda install networkx
 
 For the topic modelling modules, you will need...
 
-### Install \_kiara\_ and its plugins
+### Install kiara and its plugins
 
 Use pip to install _kiara_:
 
@@ -47,7 +47,7 @@ Use pip to install _kiara_:
 pip install kiara
 ```
 
-Once complete, install _kiara's_ plugins:
+The installation may take a few minutes. Once complete, install _kiara's_ plugins:
 
 ```
 pip install kiara_plugin.core_types kiara_plugin.onboarding kiara_plugin.tabular

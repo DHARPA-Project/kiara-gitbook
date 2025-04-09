@@ -1,6 +1,6 @@
 ---
 description: >-
-  How to install _kiara_ and its dependencies in a virtual environment for Mac
+  How to install kiara and its dependencies in a virtual environment for Mac
   users
 ---
 
@@ -39,7 +39,7 @@ conda install networkx
 
 For the topic modelling modules, you will need...
 
-### Install \_kiara\_ and its plugins
+### Install kiara and its plugins
 
 Use pip to install _kiara_:
 
