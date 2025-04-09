@@ -47,7 +47,7 @@ Use pip to install _kiara_:
 pip install kiara
 ```
 
-Once complete, install _kiara's_ plugins:
+The installation may take a few minutes. Once complete, install _kiara's_ plugins:
 
 ```
 pip install kiara_plugin.core_types kiara_plugin.onboarding kiara_plugin.tabular
