@@ -1,6 +1,6 @@
 # in CLI
 
-### Upload your data
+### Import your data
 
 Import the .csv file(s) you want to analyse:
 
@@ -26,4 +26,4 @@ To run any operation, use:&#x20;
 kiara run <operation_name>
 ```
 
-> Tip: if you are ever unsure what the _kiara_ names for inputs and outputs are, run `kiara operation explain` followed by the module name.
+> Tip: if you are ever unsure what the _kiara_ names for inputs and outputs are, run `kiara operation explain <module name>` .
