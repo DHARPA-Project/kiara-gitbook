@@ -8,6 +8,8 @@ Import the .csv file(s) you want to analyse:
 kiara run import.local.file path=/...
 ```
 
+Replace `/...` with the full path to your .csv file.   &#x20;
+
 Tracking your steps through comments is a fundamental aspect of using _kiara_, so don't forget to include an accurate description after `-c` , as done here with `importing_data` .
 
 ### Choose and run an operation
