@@ -2,7 +2,7 @@
 
 ### Upload your data
 
-Upload the .csv file(s) you want to analyse:
+Import the .csv file(s) you want to analyse:
 
 ```⏎
 kiara run import.local.file path=/...
@@ -18,6 +18,10 @@ To see the operations available, use:
 kiara operation list
 ```
 
-To run any operation, use: `kiara run` followed by
+To run any operation, use:&#x20;
+
+```
+kiara run <operation_name>
+```
 
 > Tip: if you are ever unsure what the _kiara_ names for inputs and outputs are, run `kiara operation explain` followed by the module name.
