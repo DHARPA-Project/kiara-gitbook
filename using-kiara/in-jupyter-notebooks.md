@@ -24,7 +24,7 @@ kiara = KiaraAPI.instance()
 
 In kiara, a context is your project space. It keeps track of your data, the tasks you run, and the steps you take. A default context is always available, but you can also create your own for specific projects.&#x20;
 
-To create and use a new context called `'hello_kiara'`:
+To create and use a new context called `"Hello_kiara"`:
 
 ```
 kiara.set_active_context(context_name='hello_kiara', create=True)
@@ -46,7 +46,7 @@ Current Context: hello_kiara
 
 This confirms that your new context is set up and ready to use.&#x20;
 
-Now we can explore the tools kiara offers. To view a list of all available operations (based on the installed plugins), run:&#x20;
+Now, we can explore the tools kiara offers. To view a list of all available operations (based on the installed plugins), run:&#x20;
 
 ```
 kiara.list_operation_ids()
@@ -80,4 +80,68 @@ inputs = {
 
 outputs = kiara.run_job('download.file', inputs=inputs, comment="importing journal nodes")
 ```
+
+This gives you a file object as output, including the downloaded file and some technical metadata. Let’s print it to confirm:
+
+```
+outputs
+```
+
+You will see a preview of the file's content. This shows the journal data was successfully downloaded.&#x20;
+
+To keep using this file later (even if the notebook is closed), we will save it inside kiara using an alias. This works like giving a name that kiara remembers.&#x20;
+
+```
+downloaded_file = outputs['file']
+kiara.store_value(value=downloaded_file.value_id, alias='Journal_Nodes')
+```
+
+Now, `"Journal_Nodes"` is saved in kiara's internal storage. You can refer to it later just by its alias - just like using a variable in Python.&#x20;
+
+## Convert the file into a table
+
+Now that we have downloaded the file, let's turn it into a table so we can work with the data.&#x20;
+
+We can look through kiara’s available operations by filtering for those that start with `"create"`:
+
+```
+kiara.list_operation_ids('create')
+```
+
+This shows a list of operations. Since we’re working with a CSV file, the one we want is:
+
+```
+create.table.from.file
+```
+
+This operation will read the file and turn it into a structured table.
+
+To see what inputs and outputs this operation expects, run:
+
+```
+op_id = 'create.table.from.file'
+kiara.retrieve_operation_info(op_id)
+```
+
+From this, we learn:
+
+* It requires a file.
+* It optionally accepts:
+  * `first_row_is_header` – set this to `True` if the first row contains column names.
+  * `delimiter` – if Kiara can’t automatically detect it.
+
+The output will be a table, which we can use in later steps.
+
+Let’s turn the downloaded file (which we saved earlier under the alias `'Journal_Nodes'`) into a table:
+
+```
+inputs = {
+    "file": kiara.get_value('Journal_Nodes'),
+    "first_row_is_header": True
+}
+
+outputs = kiara.run_job(op_id, inputs=inputs, comment="creating table from journal CSV")
+```
+
+This will process the CSV file and show the result as a table with columns and rows.
 
