@@ -145,3 +145,67 @@ outputs = kiara.run_job(op_id, inputs=inputs, comment="creating table from journ
 
 This will process the CSV file and show the result as a table with columns and rows.
 
+To make it easier to reuse the table later, we can save it in Kiara under a new alias:
+
+```
+outputs_table = outputs['table']
+kiara.store_value(value=outputs_table.value_id, alias="Journal_Nodes_table")
+```
+
+Now, your data is saved inside Kiara and can be accessed at any time using the name `"Journal_Nodes_table"`.
+
+## Query your data
+
+Now that we have downloaded the file and converted it into a table, we can start exploring the data. One simple way to do that is by running SQL queries directly on the table using κiara.
+
+To find relevant operations for querying data, search with the keyword `'query'`:
+
+```
+kiara.list_operation_ids('query')
+```
+
+This returns:
+
+```
+['query.database', 'query.table']
+```
+
+Since we are working with a table, we will use:
+
+```
+kiara.retrieve_operation_info('query.table')
+```
+
+This tells us that `query.table` allows us to write an SQL query to explore the data. The required inputs are:
+
+* `table`: the data you want to query
+* `query`: your SQL statement\
+  (use `data` as the name of the table inside the query)
+
+Let’s find all the rows where the City is Berlin:
+
+```
+inputs = {
+    "table": kiara.get_value('Journal_Nodes_table'),
+    "query": "SELECT * FROM data WHERE City LIKE 'Berlin'"
+}
+
+outputs = kiara.run_job('query.table', inputs=inputs, comment="")
+```
+
+The result (in `outputs['query_result']`) is a filtered table showing only journals published in Berlin.
+
+We can now go one step further: from the previous result, let’s find only the journals about general medicine.
+
+```
+inputs = {
+    "table": outputs['query_result'],
+    "query": "SELECT * FROM data WHERE JournalType LIKE 'general medicine'"
+}
+
+outputs = kiara.run_job('query.table', inputs=inputs, comment="")
+
+```
+
+This returns a smaller table with only the Berlin-based general medicine journals.
+
