@@ -209,3 +209,76 @@ outputs = kiara.run_job('query.table', inputs=inputs, comment="")
 
 This returns a smaller table with only the Berlin-based general medicine journals.
 
+## Record and trace your data
+
+Now that we’ve transformed and queried our data, it’s a good time to review what κiara knows about the outputs we've created and how it tracks changes.
+
+```
+query_output = outputs['query_result']
+query_output
+```
+
+Each result from a kiara operation (like a filtered table) comes with detailed information. Let’s explore the metadata for our most recent query:
+
+```
+query_output = outputs['query_result']
+query_output
+```
+
+This gives us:
+
+* A unique value ID
+* The data type (in this case, a `table`)
+* When the value was created
+* A record of the job that generated it
+* Links to the inputs and outputs of previous steps
+
+kiara automatically tracks every step in your workflow — including all inputs, outputs, and changes.
+
+To see the “backstage” view of how your data was transformed:
+
+```
+query_output.lineage
+```
+
+This shows a chain of operations:
+
+* The SQL query you ran (`query.table`)
+* The table that was queried (from `create.table`)
+* The original file that was downloaded (`download.file`)
+
+Each input is assigned a unique ID, allowing complete transparency and traceability.
+
+Do you want to see all the steps as a visual flowchart? kiara supports a visual lineage view:
+
+```
+lineage = kiara.retrieve_augmented_value_lineage(query_output)
+
+from observable_jupyter import embed
+embed('@dharpa-project/kiara-data-lineage', cells=['displayViz', 'style'], inputs={'dataset': lineage})
+```
+
+This shows how your data moved through each operation — a powerful way to understand and explain your process.
+
+You can also list every operation you’ve run in your kiara context, including inputs, outputs, and comments:
+
+```
+kiara.print_all_jobs_info_data(show_inputs=True, show_outputs=True, max_char=100)
+```
+
+This log is helpful if:
+
+* You’ve made changes and want to track them
+* You want to check which parameters you used
+* You want to create a record of your data workflow
+
+To keep a record or share it with others, you can export the full job log as a CSV:
+
+```
+import pandas as pd
+
+job_table = pd.DataFrame(kiara.get_all_jobs_info_data())
+job_table.to_csv('job_log.csv', index=False)
+```
+
+This makes it easy to archive your work or include your workflow in documentation or publications.
