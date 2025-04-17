@@ -22,19 +22,19 @@ To see the modules (a.k.a operations) available, along with short descriptions, 
 kiara operation list
 ```
 
-To find out what inputs are needed to run any of these modules , use:
+To find out more about any of these modules, use:
 
 ```
 kiara operation explain <module ID>
 ```
 
-This will provide you with&#x20;
+This will provide you with documentation on that operation (i.e. what it does), the inputs it requires or allows, and the outputs it creates. The field names provided here – for inputs and outputs – are vital knowledge for running modules, given that:
 
-To run any module, use:&#x20;
+To run any module, you use:
 
 {% code overflow="wrap" %}
 ```
-kiara run <module ID> <field name for input>=<the string, boolean or table required for that input> <any further inputs in same format> -s <kiara name for output>=<output alias> -c <comment>
+kiara run <module ID> <field name for input>=<the string, boolean or table required for that input> <any further inputs in same format> -s <field name for output>=<output alias> -c <comment>
 ```
 {% endcode %}
 
@@ -49,7 +49,7 @@ First you'll need to turn your imported .csv file into a table within kiara:
 
 Now you can create the network using the module `assemble.network_graph`.
 
-But first, use `kiara operation explain assemble.network_graph` to find out what input decisions are required. All of the relevant information will be presented to you in a table, explaining what the module does, what it needs (inputs), and what it creates (outputs). For example, based on the information provided on `assemble.network_graph`, you would write the following command if you wanted to create a directed weighted graph where the parallel edges are added together to give the weight to the edge:
+But first, use `kiara operation explain assemble.network_graph` to find out what input decisions are required and what the field name for the output is. For example, based on the information provided for `assemble.network_graph`, you would write the following command if you wanted to create a directed weighted graph where the parallel edges are added together to give the weight to the edge:
 
 {% code overflow="wrap" %}
 ```
