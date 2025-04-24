@@ -16,7 +16,7 @@ Tracking your steps through comments is a fundamental aspect of using _kiara_, s
 
 ### Choose and run modules
 
-To see the modules (a.k.a operations) available, along with short descriptions, use:
+To see the modules (a.k.a operations) available, along with their IDs in kiara and short descriptions, use:
 
 ```
 kiara operation list
@@ -34,7 +34,7 @@ To run any module, you use:
 
 {% code overflow="wrap" %}
 ```
-kiara run <module ID> <field name for input>=<the string, boolean or table required for that input> <any further inputs in same format> -s <field name for output>=<output alias> -c <comment>
+kiara run <module ID> <field name(s) for input(s)>=<required input(s)> -s <field name for output>=<output alias> -c <comment>
 ```
 {% endcode %}
 
@@ -49,7 +49,9 @@ First you'll need to turn your imported .csv file into a table within kiara:
 
 Now you can create the network using the module `assemble.network_graph`.
 
-But first, use `kiara operation explain assemble.network_graph` to find out what input decisions are required and what the field name for the output is. For example, based on the information provided for `assemble.network_graph`, you would write the following command if you wanted to create a directed weighted graph where the parallel edges are added together to give the weight to the edge:
+But first, use `kiara operation explain assemble.network_graph` to find out what input decisions are required and what the field name for the output is.
+
+For example, based on the information provided for `assemble.network_graph`, you would write the following command if you wanted to create a directed weighted graph where the parallel edges are added together to give the weight to the edge:
 
 {% code overflow="wrap" %}
 ```
@@ -57,9 +59,4 @@ kiara run assemble.network_graph graph_type='directed' edges=alias:<table alias>
 ```
 {% endcode %}
 
-Now you have your desired graph (under 'Result'), and can analyse it using one or more analysis modules. For example:
-
-```
-kiara operation explain tropy.calculate.degree_score
-```
-
+This will produce your desired graph in tabular form, under 'Result'. Now you can analyse it using one or more analysis modules. As before, start with `kiara operation explain <module ID>` to find out what is needed.
