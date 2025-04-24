@@ -22,7 +22,7 @@ To see the modules (a.k.a operations) available, along with their IDs in kiara a
 kiara operation list
 ```
 
-To find out more about any of these modules, use:
+Each operation shown in the list is a task you can perform in kiara, such as creating a table, calculating network metrics, or exporting files. To find out more about any of these modules, use:
 
 ```
 kiara operation explain <module ID>
