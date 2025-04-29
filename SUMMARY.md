@@ -14,7 +14,7 @@
 
 ## Using kiara
 
-* [in Jupyter notebooks](using-kiara/in-jupyter-notebooks.md)
+* [in Jupyter notebooks - network analysis](using-kiara/in-jupyter-notebooks-network-analysis.md)
 * [in CLI](using-kiara/in-cli.md)
 * [Use case](using-kiara/use-case.md)
 
