@@ -1,4 +1,4 @@
-# in Jupyter notebooks
+# network analysis in Jupyter notebooks
 
 ## Run kiara
 
