@@ -1,6 +1,6 @@
-# network analysis in Jupyter notebooks
+# Network analysis in Jupyter notebooks
 
-## Run kiara
+## Set up kiara
 
 To start using kiara in Jupyter notebooks, you need to create an instance of the `kiaraAPI`. This API provides access to kiara's functions, enabling you to interact with and control your data workflows.
 
