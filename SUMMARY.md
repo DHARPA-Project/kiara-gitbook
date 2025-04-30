@@ -15,7 +15,7 @@
 ## Using kiara
 
 * [Network analysis in Jupyter notebooks](using-kiara/network-analysis-in-jupyter-notebooks.md)
-* [Topic modeling in Jupyter notebooks](using-kiara/topic-modeling-in-jupyter-notebooks.md)
+* [Natural Language Processing in Jupyter notebooks](using-kiara/natural-language-processing-in-jupyter-notebooks.md)
 * [in CLI](using-kiara/in-cli.md)
 * [Use case](using-kiara/use-case.md)
 
