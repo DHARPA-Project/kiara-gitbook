@@ -1,6 +1,6 @@
 # Natural Language Processing in Jupyter Notebook
 
-## Set up kiara
+## Setting up kiara
 
 Before we begin, we must ensure that Kiara and its plugins are correctly installed.
 
@@ -23,7 +23,7 @@ kiara = KiaraAPI.instance()
 
 This will check (and if needed, install) everything required to use Kiara inside your notebook.
 
-## Choose a text corpus
+## Choosing a text corpus
 
 Now that the environment is ready, we need a small collection of texts to work with.
 
@@ -33,7 +33,7 @@ The file name structure is: LCCNnumber\_date\_pageNumber\_ocr.txt. Therefore, th
 
 _kiara_ enables us to retrieve both the text files and the metadata embedded in their filenames. This is very valuable for historical research, as it helps maintain transparency and traceability in how we access and process our sources.
 
-## Find the right download operation
+## Finding the right download operation
 
 kiara has built-in operations for downloading files.
 
@@ -71,7 +71,7 @@ outputs = kiara.run_job('download.file_bundle', inputs=inputs)
 outputs
 ```
 
-## Understand the output
+## Understanding the output
 
 kiara provides two outputs:
 
@@ -79,7 +79,7 @@ kiara provides two outputs:
 
 `download_metadata` shows metadata about the downloaded files.
 
-## Save the text bundle
+## Saving the text bundle
 
 Now, let's save the bundle of text files for later use:
 
@@ -87,7 +87,7 @@ Now, let's save the bundle of text files for later use:
 file_bundle = outputs['file_bundle']
 ```
 
-## Prepare the texts for analysis
+## Preparing the texts for analysis
 
 Now that we’ve downloaded the files, we want to give them structure. Working with raw text files is limiting, especially for analysis.
 
@@ -129,7 +129,7 @@ The files have been turned into a table, which makes it easier to investigate wh
 
 Most importantly, we now have a column named `content` that holds the OCRed text from each file - this is what we will use for Natural Language Processing (NLP).
 
-## Extract the text content
+## Extracting the text content
 
 As we are interested in the content of one column, we can use kiara operations to pick the column we want and extract its content.
 
@@ -194,7 +194,7 @@ We will walk through:
 * Cleaning and standardizing it
 * Running topic modeling (LDA) to extract thematic patterns
 
-## Explore NLP operations
+## Exploring NLP operations
 
 Kiara includes a set of operations specifically designed for natural **l**anguage processing, available through the `kiara_plugin.language_processing` package.
 
@@ -225,7 +225,7 @@ dict_keys([
 
 We will begin with `tokenize.texts_array`.
 
-## Tokenize the text
+## Tokenizing the text
 
 Tokenization is the process of splitting text into individual words (or "tokens"). It is a crucial first step before any further analysis.
 
@@ -273,7 +273,7 @@ Now, each text has been transformed into a list of tokens:
 │                                                                                                                                    
 ```
 
-## Preprocess the tokens
+## Preprocessing the tokens
 
 We will now clean the tokens using `preprocess.tokens_array`. This function allows us to apply several  operations:
 
@@ -395,7 +395,7 @@ The output shows:
 * `topic_models`: The list of topics with key terms and weights
 * `coherence_map` and `coherence_table`: Optional evaluation scores
 
-## Record and trace the data
+## Recording and tracing the data
 
 We've successfully downloaded, organised, and pre-processed our text files, and now generated some topics for it.
 
@@ -457,7 +457,7 @@ This command shows:
 * All input parameters used (e.g., which stopwords were removed)
 * The source data (the original file)
 
-## Build a reusable workflow
+## Building a reusable workflow
 
 Now that we have introduced the key concepts and preprocessing steps in NLP, we will implement these processes practically using a workflow.&#x20;
 
@@ -473,3 +473,130 @@ workflow = Workflow.create("topic_modeling", doc=doc, replace_existing_alias=Tru
 ```
 
 In the code above, we define a description for the workflow and assign it the alias `"topic_modeling"`, which allows us to reference it easily later. The parameter `replace_existing_alias=True` ensures that any existing workflow with the same alias will be replaced.&#x20;
+
+## Assemble the workflow
+
+To construct our topic modeling pipeline, we assemble a series of processing steps from kiara’s modular system. Each module handles a specific task, such as importing files, preprocessing text, or generating topics using LDA. Below, we describe each step and how they are connected together. Each step in the workflow is added first and then connected to the output of a previous step.
+
+## The steps of the workflow
+
+## Step: `import_text_corpus`
+
+This module imports a folder of text files from the local filesystem as a file bundle.
+
+```
+# Creating step: import_text_corpus
+workflow.add_step(operation="import.file_bundle", step_id="import_text_corpus")
+```
+
+## Step: `create_stopwords_list`
+
+In this module, we create a list of stopwords based on selected languages or custom lists.&#x20;
+
+```
+# Creating step: create_stopwords_list
+workflow.add_step(operation="create.stopwords_list", step_id="create_stopwords_list")
+```
+
+## Step: `create_text_corpus`
+
+Here we transform the imported text files into a table structure, and then we connect the input of this step to the output of the previous step.
+
+```
+# Creating step: create_text_corpus
+step_create_text_corpus_config = {'constants': {}, 'defaults': {}, 'source_type': 'text_file_bundle', 'target_type': 'table', 'ignore_errors': False}
+workflow.add_step(
+    operation="create.table",
+    module_config=step_create_text_corpus_config,
+    step_id="create_text_corpus")
+```
+
+```
+# Connecting input(s) of step 'create_text_corpus'
+workflow.connect_fields("create_text_corpus.text_file_bundle", "import_text_corpus.file_bundle")
+```
+
+## Step: `extract_texts_column`
+
+We extract the column containing the textual content from the table and convert it into an array suitable for tokenization.
+
+```
+# Creating step: extract_texts_column
+workflow.add_step(operation="table.cut_column", step_id="extract_texts_column")
+```
+
+```
+# Connecting input(s) of step 'extract_texts_column'
+workflow.connect_fields("extract_texts_column.table", "create_text_corpus.table")
+```
+
+## Step: `extract_filename_column`
+
+Here we extract the filenames as a separate array.
+
+<pre><code><strong># Creating step: extract_filename_column
+</strong>workflow.add_step(operation="table.cut_column", step_id="extract_filename_column")
+</code></pre>
+
+```
+# Connecting input(s) of step 'extract_filename_column'
+workflow.connect_fields("extract_filename_column.table", "create_text_corpus.table")
+```
+
+## Step: `create_date_array`
+
+We parse the filenames to extract date information, assuming they include date stamps.
+
+```
+# Creating step: create_date_array
+workflow.add_step(operation="parse.date_array", step_id="create_date_array")
+```
+
+```
+# Connecting input(s) of step 'create_date_array'
+workflow.connect_fields("create_date_array.array", "extract_filename_column.array")
+```
+
+## Step: `tokenize_content`
+
+The text array is tokenized to prepare it for further processing.
+
+```
+# Creating step: tokenize_content
+workflow.add_step(operation="tokenize.texts_array", step_id="tokenize_content")
+```
+
+```
+# Connecting input(s) of step 'tokenize_content'
+workflow.connect_fields("tokenize_content.texts_array", "extract_texts_column.array")
+```
+
+## Step: `preprocess_corpus`
+
+Here we apply several preprocessing techniques, such as removing stopwords, filtering short or irrelevant tokens. This helps clean the data and reduce noise before modeling.
+
+```
+# Creating step: preprocess_corpus
+workflow.add_step(operation="preprocess.tokens_array", step_id="preprocess_corpus")
+```
+
+```
+# Connecting input(s) of step 'preprocess_corpus'
+workflow.connect_fields("preprocess_corpus.tokens_array", "tokenize_content.tokens_array")
+workflow.connect_fields("preprocess_corpus.remove_stopwords", "create_stopwords_list.stopwords_list")
+```
+
+## Step: `generate_lda`
+
+We apply  LDA to identify latent topics in the text corpus. The model is computed for different numbers of topics, and coherence scores are generated to assess model quality.
+
+```
+# Creating step: generate_lda
+workflow.add_step(operation="generate.LDA.for.tokens_array", step_id="generate_lda")
+```
+
+```
+# Connecting input(s) of step 'generate_lda'
+workflow.connect_fields("generate_lda.tokens_array", "preprocess_corpus.tokens_array")
+```
+

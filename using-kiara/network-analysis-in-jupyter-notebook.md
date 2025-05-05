@@ -1,6 +1,6 @@
 # Network analysis in Jupyter Notebook
 
-## Install kiara and its plugins
+## Installing kiara and its plugins
 
 Before we get started, we need to check whether kiara and its associated plugins are installed. kiara's features are available through plugins.&#x20;
 
@@ -36,7 +36,7 @@ except:
 ensure_kiara_plugins()
 ```
 
-## Set up kiara
+## Setting up kiara
 
 Now that the plugins are ready, let's set up kiara itself.
 
@@ -50,7 +50,7 @@ from kiara.api import KiaraAPI
 kiara = KiaraAPI.instance()
 ```
 
-## Create a project
+## Creating a project
 
 In kiara, a context is your project space. It keeps track of your data, the tasks you run, and the steps you take. A default context is always available, but you can also create your own for specific projects.&#x20;
 
@@ -90,7 +90,7 @@ This will return a list of operations, like:
 
 Each operation is a task you can perform in kiara, such as creating a table, calculating network metrics, or exporting files.&#x20;
 
-## Download a file&#x20;
+## Downloading a file&#x20;
 
 Now that kiara is set up, let's bring a file into our notebook using the `download.file` operation. &#x20;
 
@@ -128,7 +128,7 @@ kiara.store_value(value=downloaded_file.value_id, alias='Journal_Nodes')
 
 Now, `"Journal_Nodes"` is saved in kiara's internal storage. You can refer to it later just by its alias - just like using a variable in Python.&#x20;
 
-## Convert the file into a table
+## Converting the file into a table
 
 Now that we have downloaded the file, let's turn it into a table so we can work with the data.&#x20;
 
@@ -184,7 +184,7 @@ kiara.store_value(value=outputs_table.value_id, alias="Journal_Nodes_table")
 
 Now, your data is saved inside Kiara and can be accessed at any time using the name `"Journal_Nodes_table"`.
 
-## Query your data
+## Quering your data
 
 Now that we have downloaded the file and converted it into a table, we can start exploring the data. One simple way to do that is by running SQL queries directly on the table using κiara.
 
@@ -239,7 +239,7 @@ outputs = kiara.run_job('query.table', inputs=inputs, comment="")
 
 This returns a smaller table with only the Berlin-based general medicine journals.
 
-## Record and trace your data
+## Recording and tracing your data
 
 Now that we’ve transformed and queried our data, it’s a good time to review what κiara knows about the outputs we've created and how it tracks changes.
 
