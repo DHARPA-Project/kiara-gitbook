@@ -1,18 +1,48 @@
-# Network analysis in Jupyter notebooks
+# Network analysis in Jupyter Notebook
 
-## Set up kiara
+## Installing kiara and its plugins
 
-To start using kiara in Jupyter notebooks, you need to create an instance of the `kiaraAPI`. This API provides access to kiara's functions, enabling you to interact with and control your data workflows.
+Before we get started, we need to check whether kiara and its associated plugins are installed. kiara's features are available through plugins.&#x20;
 
-To set this up, launch Jupyter from the command line by running:
+There are seven plugins:&#x20;
+
+* [`kiara_plugin.core-types`](https://dharpa.org/kiara_plugin.core_types/latest/)
+* [`kiara_plugin.onboarding`](https://dharpa.org/kiara_plugin.onboarding/latest/)
+* [`kiara_plugin.tabular`](https://dharpa.org/kiara_plugin.tabular/latest/)
+* [`kiara_plugin.network_analysis`](https://dharpa.org/kiara_plugin.network_analysis/latest/)
+* [`kiara_plugin.language_processing`](https://dharpa.org/kiara_plugin.language_processing/latest/)
+* [`kiara_plugin.html`](https://dharpa.org/kiara_plugin.html/latest/)
+* [`kiara_plugin.streamlit`](https://dharpa.org/kiara_plugin.streamlit/latest/)
+
+To install these, first launch Jupyter from the command line by running:
 
 ```
-jupyter notebook
+jupyter Notebook
 ```
 
 This will open the Jupyter notebook in your default web browser.&#x20;
 
-In a notebook cell, run the following:
+In a notebook cell, run the following code:
+
+```
+try:
+    from kiara_plugin.jupyter import ensure_kiara_plugins
+except:
+    import sys
+    print("Installing 'kiara_plugin.jupyter'...")
+    !{sys.executable} -m pip install -q kiara_plugin.jupyter
+    from kiara_plugin.jupyter import ensure_kiara_plugins
+
+ensure_kiara_plugins()
+```
+
+## Set up kiara
+
+Now that the plugins are ready, let's set up kiara itself.
+
+To start using kiara in Jupyter, you need to create an instance of the `kiaraAPI`. This API provides access to kiara's functions, enabling you to interact with and control your data workflows.
+
+To set this up, run the following code in a notebook cell:
 
 ```
 from kiara.api import KiaraAPI
