@@ -1,6 +1,6 @@
 # Network analysis in Jupyter Notebook
 
-## Installing kiara and its plugins
+## Install kiara and its plugins
 
 Before we get started, we need to check whether kiara and its associated plugins are installed. kiara's features are available through plugins.&#x20;
 

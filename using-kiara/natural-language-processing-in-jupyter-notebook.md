@@ -1,4 +1,4 @@
-# Natural Language Processing in Jupyter notebooks
+# Natural Language Processing in Jupyter Notebook
 
 ## Set up kiara
 
@@ -459,3 +459,17 @@ This command shows:
 
 ## Build a reusable workflow
 
+Now that we have introduced the key concepts and preprocessing steps in NLP, we will implement these processes practically using a workflow.&#x20;
+
+This section walks through the creation of a NLP pipeline using Kiara’s `Workflow` functionality.
+
+We begin by creating a `Workflow` object. This manages the internal state, execution history, and consistency of our processing steps.
+
+To create a `Workflow` object, run the code:
+
+```
+doc = """Example topic-modeling end-to-end workflow."""
+workflow = Workflow.create("topic_modeling", doc=doc, replace_existing_alias=True)
+```
+
+In the code above, we define a description for the workflow and assign it the alias `"topic_modeling"`, which allows us to reference it easily later. The parameter `replace_existing_alias=True` ensures that any existing workflow with the same alias will be replaced.&#x20;
