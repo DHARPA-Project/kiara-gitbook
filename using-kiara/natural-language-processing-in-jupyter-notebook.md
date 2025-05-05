@@ -474,7 +474,7 @@ workflow = Workflow.create("topic_modeling", doc=doc, replace_existing_alias=Tru
 
 In the code above, we define a description for the workflow and assign it the alias `"topic_modeling"`, which allows us to reference it easily later. The parameter `replace_existing_alias=True` ensures that any existing workflow with the same alias will be replaced.&#x20;
 
-## Assemble the workflow
+## Assembling the workflow
 
 To construct our topic modeling pipeline, we assemble a series of processing steps from kiara’s modular system. Each module handles a specific task, such as importing files, preprocessing text, or generating topics using LDA. Below, we describe each step and how they are connected together. Each step in the workflow is added first and then connected to the output of a previous step.
 
@@ -600,3 +600,101 @@ workflow.add_step(operation="generate.LDA.for.tokens_array", step_id="generate_l
 workflow.connect_fields("generate_lda.tokens_array", "preprocess_corpus.tokens_array")
 ```
 
+## Setting workflow input/output names (optional)
+
+To make our workflow easier to understand and reuse, we can assign custom aliases to the input and output fields. These aliases provide more intuitive names for parameters that users may want to configure or retrieve results from.
+
+For example, rather than referring to input fields like `extract_texts_column.column_name`, we can assign the alias `content_column_name` . Similarly, we can rename output fields for clarity. See the example below:
+
+```
+workflow.set_input_alias(input_field="extract_texts_column.column_name", alias="content_column_name")
+workflow.set_input_alias(input_field="extract_filename_column.column_name", alias="filename_column_name")
+workflow.set_input_alias(input_field="import_text_corpus.path", alias="text_corpus_folder_path")
+workflow.set_input_alias(input_field="create_date_array.min_index", alias="date_parse_min")
+workflow.set_input_alias(input_field="create_date_array.max_index", alias="date_parse_max")
+workflow.set_input_alias(input_field="create_date_array.force_non_null", alias="date_force_non_null")
+workflow.set_input_alias(input_field="create_date_array.remove_tokens", alias="date_remove_tokensl")
+workflow.set_input_alias(input_field="tokenize_content.tokenize_by_word", alias="tokenize_by_word")
+workflow.set_input_alias(input_field="generate_lda.num_topics_min", alias="num_topics_min")
+workflow.set_input_alias(input_field="generate_lda.num_topics_max", alias="num_topics_max")
+workflow.set_input_alias(input_field="generate_lda.compute_coherence", alias="compute_coherence")
+workflow.set_input_alias(input_field="generate_lda.words_per_topic", alias="words_per_topic")
+workflow.set_input_alias(input_field="create_stopwords_list.languages", alias="languages")
+workflow.set_input_alias(input_field="create_stopwords_list.stopword_lists", alias="stopword_lists")
+workflow.set_input_alias(input_field="preprocess_corpus.to_lowercase", alias="to_lowercase")
+workflow.set_input_alias(input_field="preprocess_corpus.remove_alphanumeric", alias="remove_alphanumeric")
+workflow.set_input_alias(input_field="preprocess_corpus.remove_non_alpha", alias="remove_non_alpha")
+workflow.set_input_alias(input_field="preprocess_corpus.remove_all_numeric", alias="remove_all_numeric")
+workflow.set_input_alias(input_field="preprocess_corpus.remove_short_tokens", alias="remove_short_tokens")
+workflow.set_input_alias(input_field="preprocess_corpus.remove_stopwords", alias="remove_stopwords")
+
+
+workflow.set_output_alias(output_field="import_text_corpus.file_bundle", alias="text_corpus_file_bundle")
+workflow.set_output_alias(output_field="create_text_corpus.table", alias="text_corpus_table")
+workflow.set_output_alias(output_field="extract_texts_column.array", alias="content_array")
+workflow.set_output_alias(output_field="tokenize_content.tokens_array", alias="tokenized_corpus")
+workflow.set_output_alias(output_field="preprocess_corpus.tokens_array", alias="preprocessed_corpus")
+workflow.set_output_alias(output_field="generate_lda.topic_models", alias="topic_models")
+workflow.set_output_alias(output_field="generate_lda.coherence_map", alias="coherence_map")
+workflow.set_output_alias(output_field="generate_lda.coherence_table", alias="coherence_table")
+workflow.set_output_alias(output_field="create_date_array.date_array", alias="date_array")
+```
+
+## Checking workflow status
+
+Once all steps are added and connected, and aliases assigned, we can inspect the workflow’s current state. This allows us to verify which inputs and outputs are ready or still need to be set:
+
+```
+workflow.current_state
+```
+
+## Viewing the execution graph
+
+To understand how many steps of the workflow pipeline are connected, we can look at the execution graph.
+
+```
+graph_to_image(workflow.pipeline.execution_graph)
+```
+
+## Setting workflow inputs
+
+Once a workflow has an assembled pipeline, we can set its inputs. We use the input field names that we got from the result of the `workflow.current_state` call. These include the path to your text corpus, the names of relevant columns, and preprocessing options. Here’s how inputs are set and how we execture the workflow:
+
+```
+workflow.set_input("text_corpus_folder_path", "/home/markus/projects/kiara/dev/kiara.examples/examples/pipelines/topic_modeling/../../data/text_corpus/data")
+workflow.set_input("content_column_name", "content")
+workflow.set_input("filename_column_name", "file_name")
+workflow.set_input("date_force_non_null", None)
+workflow.set_input("date_parse_min", 11)
+workflow.set_input("date_parse_max", 21)
+workflow.set_input("date_remove_tokensl", None)
+workflow.set_input("tokenize_by_word", None)
+workflow.set_input("languages", ['italian'])
+workflow.set_input("stopword_lists", [])
+workflow.set_input("to_lowercase", None)
+workflow.set_input("remove_alphanumeric", None)
+workflow.set_input("remove_non_alpha", None)
+workflow.set_input("remove_all_numeric", None)
+workflow.set_input("remove_short_tokens", None)
+workflow.set_input("num_topics_min", 7)
+workflow.set_input("num_topics_max", 9)
+workflow.set_input("compute_coherence", True)
+workflow.set_input("words_per_topic", None)
+
+
+# process all workflow steps that can be processed
+workflow.process_steps()
+
+# print the current state, after we set our inputs
+workflow.current_state
+```
+
+## Printing workflow outputs
+
+Once we have executed the workflow, we can inspect the current outputs using:
+
+```
+workflow.current_output_values
+```
+
+(continues)
