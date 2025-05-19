@@ -126,7 +126,7 @@ downloaded_file = outputs['file']
 kiara.store_value(value=downloaded_file.value_id, alias='Journal_Nodes')
 ```
 
-Now, `"Journal_Nodes"` is saved in kiara's internal storage. You can refer to it later just by its alias - just like using a variable in Python.&#x20;
+Now, `"Journal_Nodes"` is saved in kiara's internal storage. You can refer to it later just by its alias, just like using a variable in Python.&#x20;
 
 ## Converting the file into a table
 
@@ -138,11 +138,7 @@ We can look through kiara’s available operations by filtering for those that s
 kiara.list_operation_ids('create')
 ```
 
-This shows a list of operations. Since we’re working with a CSV file, the one we want is:
-
-```
-create.table.from.file
-```
+This shows a list of operations. Since we’re working with a CSV file, the one we want is `create.table.from.file` .
 
 This operation will read the file and turn it into a structured table.
 
@@ -155,12 +151,16 @@ kiara.retrieve_operation_info(op_id)
 
 From this, we learn:
 
-* It requires a file.
-* It optionally accepts:
-  * `first_row_is_header` – set this to `True` if the first row contains column names.
-  * `delimiter` – if Kiara can’t automatically detect it.
+Inputs
 
-The output will be a table, which we can use in later steps.
+* Required: a file.
+* Optional:
+  * `first_row_is_header` – indicates if the first row of a CSV file contains column headers.
+  * `delimiter` – specifies the column separator (only for CSV), used if Kiara cannot auto-detect it.
+
+Outputs
+
+* A `table` object, which can be used in the next steps.
 
 Let’s turn the downloaded file (which we saved earlier under the alias `'Journal_Nodes'`) into a table:
 
@@ -170,7 +170,9 @@ inputs = {
     "first_row_is_header": True
 }
 
-outputs = kiara.run_job(op_id, inputs=inputs, comment="creating table from journal CSV")
+outputs = kiara.run_job(op_id, inputs=inputs, comment="")
+
+outputs
 ```
 
 This will process the CSV file and show the result as a table with columns and rows.
