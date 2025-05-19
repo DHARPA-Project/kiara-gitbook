@@ -54,20 +54,18 @@ kiara = KiaraAPI.instance()
 
 In kiara, a context is your project space. It keeps track of your data, the tasks you run, and the steps you take. A default context is always available, but you can also create your own for specific projects.&#x20;
 
-To create and use a new context called `"Hello_kiara"`:
+To create and use a new context called `hello_kiara` , run the following code:
 
 ```
 kiara.set_active_context(context_name='hello_kiara', create=True)
+
+print('Available Contexts:', kiara.list_context_names())
+print('Current Context:', kiara.get_current_context_name())
 ```
 
-To see all your available contexts and confirm which one is currently active:
+This operation will also show all your available contexts and confirm which one is currently active.
 
-```
-print("Available Contexts:", kiara.list_context_names())
-print("Current Context:", kiara.get_current_context_name())
-```
-
-This will output something like:&#x20;
+The output will be something like:&#x20;
 
 ```
 Available Contexts: ['default', 'hello_kiara']
@@ -126,13 +124,13 @@ downloaded_file = outputs['file']
 kiara.store_value(value=downloaded_file.value_id, alias='Journal_Nodes')
 ```
 
-Now, `"Journal_Nodes"` is saved in kiara's internal storage. You can refer to it later just by its alias, just like using a variable in Python.&#x20;
+Now, `Journal_Nodes` is saved in kiara's internal storage. You can refer to it later just by its alias, just like using a variable in Python.&#x20;
 
 ## Converting the file into a table
 
 Now that we have downloaded the file, let's turn it into a table so we can work with the data.&#x20;
 
-We can look through kiara’s available operations by filtering for those that start with `"create"`:
+We can look through kiara’s available operations by filtering for those that start with `create`:
 
 ```
 kiara.list_operation_ids('create')
@@ -156,13 +154,13 @@ Inputs
 * Required: a file.
 * Optional:
   * `first_row_is_header` – indicates if the first row of a CSV file contains column headers.
-  * `delimiter` – specifies the column separator (only for CSV), used if Kiara cannot auto-detect it.
+  * `delimiter` – specifies the column separator (only for CSV), used if kiara cannot auto-detect it.
 
 Outputs
 
 * A `table` object, which can be used in the next steps.
 
-Let’s turn the downloaded file (which we saved earlier under the alias `'Journal_Nodes'`) into a table:
+Let’s turn the downloaded file (which we saved earlier under the alias `Journal_Nodes`) into a table:
 
 ```
 inputs = {
@@ -177,16 +175,16 @@ outputs
 
 This will process the CSV file and show the result as a table with columns and rows.
 
-To make it easier to reuse the table later, we can save it in Kiara under a new alias:
+To make it easier to reuse the table later, we can save it in kiara under a new alias:
 
 ```
 outputs_table = outputs['table']
 kiara.store_value(value=outputs_table.value_id, alias="Journal_Nodes_table")
 ```
 
-Now, your data is saved inside Kiara and can be accessed at any time using the name `"Journal_Nodes_table"`.
+Now, your data is saved inside kiara and can be accessed at any time using the name `Journal_Nodes_table`.
 
-## Quering your data
+## Querying your data
 
 Now that we have downloaded the file and converted it into a table, we can start exploring the data. One simple way to do that is by running SQL queries directly on the table using κiara.
 
@@ -211,53 +209,51 @@ kiara.retrieve_operation_info('query.table')
 This tells us that `query.table` allows us to write an SQL query to explore the data. The required inputs are:
 
 * `table`: the data you want to query
-* `query`: your SQL statement\
-  (use `data` as the name of the table inside the query)
+* `query`: your SQL statement
 
-Let’s find all the rows where the City is Berlin:
+Let’s find out how many of these journals were published in Berlin:
 
 ```
 inputs = {
     "table": kiara.get_value('Journal_Nodes_table'),
-    "query": "SELECT * FROM data WHERE City LIKE 'Berlin'"
+    "query": "SELECT * from data where City like 'Berlin'"
 }
 
 outputs = kiara.run_job('query.table', inputs=inputs, comment="")
+
+outputs
 ```
 
 The result (in `outputs['query_result']`) is a filtered table showing only journals published in Berlin.
 
-We can now go one step further: from the previous result, let’s find only the journals about general medicine.
+Let's narrow this further and find all the journals that are about general medicine and published in Berlin.
+
+We can re-use the `query.table` function and the table we've just made, stored in `outputs['query_result']`
 
 ```
 inputs = {
-    "table": outputs['query_result'],
-    "query": "SELECT * FROM data WHERE JournalType LIKE 'general medicine'"
+    "table" : outputs['query_result'],
+    "query" : "SELECT * from data where JournalType like 'general medicine'"
 }
 
 outputs = kiara.run_job('query.table', inputs=inputs, comment="")
-
+outputs
 ```
 
 This returns a smaller table with only the Berlin-based general medicine journals.
 
 ## Recording and tracing your data
 
-Now that we’ve transformed and queried our data, it’s a good time to review what κiara knows about the outputs we've created and how it tracks changes.
+Now that we’ve transformed and queried our data, let's review what κiara knows about the outputs we've created and how it tracks changes.
 
 ```
 query_output = outputs['query_result']
 query_output
 ```
 
-Each result from a kiara operation (like a filtered table) comes with detailed information. Let’s explore the metadata for our most recent query:
+Even though we have made changes along the way, we can still access a lot of information about our data.&#x20;
 
-```
-query_output = outputs['query_result']
-query_output
-```
-
-This gives us:
+Specifically, the operation gave us:
 
 * A unique value ID
 * The data type (in this case, a `table`)
@@ -265,9 +261,9 @@ This gives us:
 * A record of the job that generated it
 * Links to the inputs and outputs of previous steps
 
-kiara automatically tracks every step in your workflow — including all inputs, outputs, and changes.
+kiara automatically traces all of these changes, keeping track of inputs and outputs and assigning each a unique identifier, so you always know exactly what has happened to your data.&#x20;
 
-To see the “backstage” view of how your data was transformed:
+To see a 'backstage' view of how your data was transformed, including the inputs for each function we have run and how they connect, run the following:
 
 ```
 query_output.lineage
@@ -281,36 +277,3 @@ This shows a chain of operations:
 
 Each input is assigned a unique ID, allowing complete transparency and traceability.
 
-Do you want to see all the steps as a visual flowchart? kiara supports a visual lineage view:
-
-```
-lineage = kiara.retrieve_augmented_value_lineage(query_output)
-
-from observable_jupyter import embed
-embed('@dharpa-project/kiara-data-lineage', cells=['displayViz', 'style'], inputs={'dataset': lineage})
-```
-
-This shows how your data moved through each operation — a powerful way to understand and explain your process.
-
-You can also list every operation you’ve run in your kiara context, including inputs, outputs, and comments:
-
-```
-kiara.print_all_jobs_info_data(show_inputs=True, show_outputs=True, max_char=100)
-```
-
-This log is helpful if:
-
-* You’ve made changes and want to track them
-* You want to check which parameters you used
-* You want to create a record of your data workflow
-
-To keep a record or share it with others, you can export the full job log as a CSV:
-
-```
-import pandas as pd
-
-job_table = pd.DataFrame(kiara.get_all_jobs_info_data())
-job_table.to_csv('job_log.csv', index=False)
-```
-
-This makes it easy to archive your work or include your workflow in documentation or publications.
