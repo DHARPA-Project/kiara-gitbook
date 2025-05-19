@@ -1,10 +1,18 @@
 # Natural Language Processing in Jupyter Notebook
 
-## Setting up kiara
+## Installing kiara and its plugins
 
 Before we begin, we must ensure that Kiara and its plugins are correctly installed.
 
-To set up kiara, run the following code:
+To install these, first launch Jupyter from the command line by running:
+
+```
+jupyter Notebook
+```
+
+This will open the Jupyter notebook in your default web browser.&#x20;
+
+In a notebook cell, run the following code:
 
 ```
 try:
@@ -16,8 +24,19 @@ except:
     from kiara_plugin.jupyter import ensure_kiara_plugins
 
 ensure_kiara_plugins()
+```
 
-from kiara import KiaraAPI
+## Setting up kiara
+
+Now that the plugins are ready, let's set up kiara itself.
+
+To start using kiara in Jupyter, you need to create an instance of the `kiaraAPI`. This API provides access to kiara's functions, enabling you to interact with and control your data workflows.
+
+To set this up, run the following code in a notebook cell:
+
+```
+from kiara.api import KiaraAPI
+
 kiara = KiaraAPI.instance()
 ```
 
@@ -33,7 +52,7 @@ The file name structure is: LCCNnumber\_date\_pageNumber\_ocr.txt. Therefore, th
 
 _kiara_ enables us to retrieve both the text files and the metadata embedded in their filenames. This is very valuable for historical research, as it helps maintain transparency and traceability in how we access and process our sources.
 
-## Finding the right download operation
+## Downloading the text corpus
 
 kiara has built-in operations for downloading files.
 
@@ -46,18 +65,37 @@ kiara.list_operation_ids('download')
 You will see:
 
 ```
-['download.file', 'download.file_bundle']
+['download.file',
+ 'download.file.from.github',
+ 'download.file.from.zenodo',
+ 'download.file_bundle',
+ 'download.file_bundle.from.github',
+ 'download.file_bundle.from.zenodo']
 ```
 
-Since we want multiple files, we choose:
+Since we want to download multiple files, let's have a look at `download.file_bundle`&#x20;
 
 ```
-download.file_bundle
+kiara.retrieve_operation_info('download.file_bundle')
 ```
 
-## Download the text corpus
+&#x20;From this, we learn:&#x20;
 
-Now we’ll download the sample text files from an archive.
+Inputs\
+Required:
+
+* `url` – the URL of an archive (e.g., a ZIP file) to download.
+
+Optional:
+
+* `sub_path` – a relative path inside the archive to extract only a specific subfolder or section.
+
+Outputs
+
+* A `file_bundle` object containing the downloaded files.
+* `download_metadata` – a dictionary with information about the download process.
+
+So, we need to define the inputs, use `kiara.run_job` with our chosen operation `download.file_bundle` , and store this as our outputs.
 
 To do that, run the following:
 
@@ -67,19 +105,15 @@ inputs = {
     "sub_path": "kiara.examples-main/examples/data/text_corpus/data"
 }
 
-outputs = kiara.run_job('download.file_bundle', inputs=inputs)
+outputs = kiara.run_job('download.file_bundle', inputs=inputs, comment="Downloading example file bundle")
 outputs
 ```
-
-## Understanding the output
 
 kiara provides two outputs:
 
 `file_bundle` shows the group of downloaded text files.&#x20;
 
 `download_metadata` shows metadata about the downloaded files.
-
-## Saving the text bundle
 
 Now, let's save the bundle of text files for later use:
 
