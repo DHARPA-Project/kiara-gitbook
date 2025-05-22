@@ -2,12 +2,12 @@
 
 ## Installing kiara and its plugins
 
-Before we begin, we must ensure that Kiara and its plugins are correctly installed.
+Before we begin, we must ensure that kiara and its plugins are correctly installed.
 
 To install these, first launch Jupyter from the command line by running:
 
 ```
-jupyter Notebook
+jupyter notebook
 ```
 
 This will open the Jupyter notebook in your default web browser.&#x20;
