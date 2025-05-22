@@ -400,3 +400,85 @@ kiara.retrieve_operation_info('create.table.from.file')
 ```
 
 This will display useful information about the function, such as the inputs it needs and the outputs it produces.
+
+Now, we can turn our CSV data into a kiara table by loading the data file we imported earlier (the one stored in `CKCC`) and telling Kiara that the first row of the file contains the column headers. You can do that with the following command:
+
+```
+inputs = {
+    "file": CKCC['file'],
+    "first_row_is_header": True
+}
+
+outputs = kiara.run_job('create.table.from.file', inputs=inputs, comment="")
+
+edges = outputs['table']
+
+outputs
+```
+
+## Preview the network structure
+
+Now that we have our edges formatted as a kiara table, we are ready to make our network graph. But before we do that, it is helpful to preview the structure of the network using kiara’s `preview.network_info` function. All we need to do is select our edges table and the column names for our sources and targets by running:
+
+```
+inputs = {'edges': edges,
+    'source_column': 'Source',
+    'target_column': 'Target'}
+
+network_info = kiara.run_job('preview.network_info', inputs=inputs, comment="")
+
+network_info
+```
+
+This function gives us the total number of nodes, but it also helps us think about how different types of graphs  - directed, undirected, multi-directed, and multi-undirected - might affect the number of edges in the network.
+
+We see that there are more edges in a directed graph than in an undirected graph. This suggests that there are reciprocal or directed edges between a pair of nodes, something typical in an epistolary network, where people are writing back and forth to each other.&#x20;
+
+We also notice that there are even more edges in a multigraph than in either of our non-multigraphs, which means the dataset includes parallel edges (i.e., duplicates in our edge table). Again, this is common for an epistolary network, where someone writes more than one letter to their friend.
+
+The preview shows no isolates (nodes without any edges) and a number of components. However, we see a large number of self-loops. This is unusual in epistolarly collections, as people are unlikely to write to themselves.&#x20;
+
+So, in addition to helping us decide what graph type is most useful for our dataset, this module helps us to review our data by flagging up potential errors or inconsistencies in our dataset that we can go back to at some point.
+
+Having access to this kind of information means we can make more informed decisions about the next steps of our research or digital analysis, especially those that are sometimes automated for us.
+
+For our network, a directed graph makes the most sense.&#x20;
+
+Let's now look at what we need to build one with our `assemble.network_graph` module using `kiara.retrieve_operation_info`.
+
+```
+kiara.retrieve_operation_info('assemble.network_graph')
+```
+
+## Assemble the network&#x20;
+
+This might seem like a chunky module, but it gets us to do a lot of important decision-making up front. This means that we don't have to keep inputting these decisions later on when we do some more analytical stuff.&#x20;
+
+If we change our mind about the kind of graph we want to use later on, we can always come back to this step. The `preview.network_info` function is useful because it allows us to get the information we need to make an informed decision about our network early on.
+
+We already decided that we want to make a directed network, so we can select 'directed' for graph type, and we created our edge table as 'edges' earlier, so we can pop that back in. We also need to specify our Source and Target columns again, and we can copy all this information from our preview module. We do not have a node table for this dataset, but if we did, now is where we would include it.
+
+Now, we can make some more decisions that we have not seen yet. One is deciding whether our network is weighted or not, which might mean a number of things, depending on the data you are using - the number of letters between correspondents, the distance between them, the number of years they have known each other. If all the relationships between nodes in the network are the same, we can set this as False; if not, we need to tell kiara where this weight information is coming from.
+
+If weights already exist in the edges table, for example, you've already assigned weights to the network before uploading the data into kiara, you can just pick the weight column and move on, or choose to do something more with them. If you have parallel edges (which the `preview.network_info` module will have told you) and you don't want to use a multigraph, you can choose how you want to handle weighted parallel edges. You can either: add all the weights together ('sum'); calculate the average weight for the merged edge ('mean'); find the largest value ('maximum'); or find the smallest value ('minimum'). This will then assign this value as the new weight for this edge in the network.
+
+If you want _kiara_ to calculate the weights for you, you can select 'sum' and total the number of occurences of this edge as a weight. Note that if you haven't provided any weights already, the edges will be automatically assigned a weight of 1, so choosing 'mean', 'minimum', or 'maximum' for this will just return a value of 1 for every edge, which will count the same as an unweighted network.
+
+The inputs for this module are prompting us to reflect on the decisions we are making as we are going along, and think about how our data fits into these kind of measurements, but by doing it in _kiara_, these inputs also allows us to _track_ these decisions, both in terms of storing the processes and with the comments we are adding in.
+
+We're still working with our letter dataset, so let's get _kiara_ to add all the edges together so that the weight will tell us how many letters each person wrote to each other.
+
+```
+inputs = {
+    'graph_type': 'directed',
+    'edges': edges,
+    'source_column': 'Source',
+    'target_column': 'Target',
+    'is_weighted': True,
+    'parallel_edge_strategy':'sum'
+}
+
+CKCC = kiara.run_job('assemble.network_graph', inputs=inputs, comment="")
+CKCC
+```
+
