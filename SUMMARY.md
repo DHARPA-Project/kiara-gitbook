@@ -22,7 +22,7 @@
 ## Customisation
 
 * [Creating modules](customisation/creating-modules.md)
-* [Creating plugins](customisation/creating-plugins.md)
+* [Creating pipelines](customisation/creating-pipelines.md)
 
 ## Troubleshooting
 
