@@ -17,7 +17,7 @@ There are seven plugins:&#x20;
 To install these, first launch Jupyter from the command line by running:
 
 ```
-jupyter Notebook
+jupyter notebook
 ```
 
 This will open the Jupyter notebook in your default web browser.&#x20;
