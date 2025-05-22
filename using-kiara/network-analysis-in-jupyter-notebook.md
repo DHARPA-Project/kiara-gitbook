@@ -342,3 +342,61 @@ Network analysis offers a computational and quantitative means to examine and ex
 
 We will not get into any core network theories or their uses in the humanities here, as we're focused on the ways in which network analysis in kiara offers an interesting way to wrap the research process, and think about the decisions we're making and how to trace them. If you're interested in learning more about network analysis, or how to code using [NetworkX](https://networkx.org/), the library currently used in these kiara modules, check out our recommended reading at the bottom.
 
+## Get started
+
+Before we begin exploring network analysis, let's make sure everything is ready.
+
+In this step, we will check that the necessary plugins are available and set up the Kiara API, which is the interface that allows us to run Kiara commands inside our Jupyter notebook.
+
+This is the code to get started:
+
+```
+import networkx as nx
+import os
+from kiara.api import KiaraAPI
+kiara = KiaraAPI.instance()
+```
+
+## Import data
+
+Next, we will set up the filepaths for the data that we are going to use in this notebook. The data file is stored in the same directory as the two jupyter notebooks. To set the file path, you can either save the full path to the csv file in the variable below, or use the `os.path` modules in Python to shorten this, as below:&#x20;
+
+```
+notebook_path = os.path.abspath('')
+
+csv_file_path = os.path.join(notebook_path,"data/CKCC.csv")
+```
+
+Great, we are all set up. We are now going to import some data again using the kiara function `import.local.file`. This function will allow you to bring in a local file, one stored on your computer. We're using sample data, but you can also use this function to import your own data.
+
+The dataset we’re using is a sample from the Circulation of Knowledge and Learned Practices in the 17th-century Dutch Republic (CKCC) collection, compiled by the Huygens Institute in the Netherlands and made available on the LetterSampo portal, part of the Reassembling the Republic of Letters project. You can find more information about these projects [here](https://seco.cs.aalto.fi/projects/rrl/).
+
+This collection includes about 20,000 letters written by and to 17th-century scholars in the Dutch Republic. By using network analysis, we can explore questions such as:
+
+* Who was the most prolific writer?
+* Which actor connected the most people?
+* Who operated in closely knit writing groups?
+
+While network analysis can be used to explore and map unknown datasets, in this case, we already know something about the data. The research questions and module parameters in this notebook have been shaped by that prior knowledge. That is important to keep in mind as we proceed.
+
+Let’s now use the `import.local.file` module from Kiara to access our CSV file. We will specify the path to the CSV file in our inputs and save the outputs of the function as 'CKCC'.
+
+```
+CKCC = kiara.run_job('import.local.file', inputs={'path': csv_file_path}, comment="importing bits")
+```
+
+## Create a network
+
+Now that we’ve imported our data, it’s time to build a network from it.&#x20;
+
+As with most network analysis tools, Kiara requires the data to be in the form of an edge table first. An edge table shows the connections or relationships between different entities, in this case, between senders and recipients of letters. Later, we could also add a table with nodes (the individual entities), but that is optional, and we will skip it for now.
+
+To transform our CSV file into an edge table, we will use the `create.table.from.file` function that we used in the first notebook. We will save this table in a variable called CKCC, which we will reuse later on.
+
+Before running it, we should check the input requirements of the function, just to make sure we are using it correctly. You can do that with the following command:
+
+```
+kiara.retrieve_operation_info('create.table.from.file')
+```
+
+This will display useful information about the function, such as the inputs it needs and the outputs it produces.
