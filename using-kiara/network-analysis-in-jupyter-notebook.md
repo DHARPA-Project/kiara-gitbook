@@ -1,8 +1,63 @@
-# Network analysis in Jupyter Notebook
+# Network analysis in jupyter notebook
 
-## Installing kiara and its plugins
+## Install kiara&#x20;
 
-Before we get started, we need to check whether kiara and its associated plugins are installed. kiara's features are available through plugins.&#x20;
+Before running any notebook, you will need to install kiara on your computer using the command-line interface (CLI). We will guide you through the process step by step.
+
+To begin, you must install conda or miniconda, which are tools for managing software environments and dependencies. We recommend installing miniconda, which is the lighter version of conda. Installation instructions for miniconda can be found [here](https://docs.anaconda.com/miniconda/).&#x20;
+
+Be sure to download the right version for your operating system (Windows, macOS, or Linux).
+
+## Set up a kiara environment
+
+We suggest creating a separate environment for kiara. This makes it easier to manage and avoid conflicts with other software. You can do this by opening your CLI and typing:
+
+```
+conda create -n kiara_testing python jupyter
+```
+
+You can replace `kiara_testing` with any name you like for your environment.
+
+Once the environment is created, activate it with:
+
+```
+conda activate kiara_testing
+```
+
+## Install packages
+
+Now that your environment is set up, you can begin installing the necessary packages. kiara is not available directly through conda, so we’ll use `pip`, another common package manager:
+
+```
+pip install kiara
+```
+
+The first installation may take a few minutes. Once kiara is installed, we will also add some essential plugins by running:&#x20;
+
+```
+pip install kiara_plugin.core_types kiara_plugin.onboarding kiara_plugin.tabular
+```
+
+To see which versions of kiara and its plugins are installed, you can run:
+
+```
+pip list | grep kiara
+```
+
+At the time of writing, the versions installed are:
+
+```
+kiara                     0.5.13
+kiara_plugin.core_types   0.5.2
+kiara_plugin.onboarding   0.5.2
+kiara_plugin.tabular      0.5.6
+```
+
+As we will see in the next section, depending on which notebooks you wish to run, you may also need to install the plugins for topic modelling and network analysis.
+
+## Install kiara's plugins
+
+Before we get started with network analysis, we need to check whether kiara and its associated plugins are installed. kiara's features are available through plugins.&#x20;
 
 There are seven plugins:&#x20;
 
@@ -36,7 +91,7 @@ except:
 ensure_kiara_plugins()
 ```
 
-## Setting up kiara
+## Set up kiara
 
 Now that the plugins are ready, let's set up kiara itself.
 
@@ -50,7 +105,7 @@ from kiara.api import KiaraAPI
 kiara = KiaraAPI.instance()
 ```
 
-## Creating a project
+## Create a project
 
 In kiara, a context is your project space. It keeps track of your data, the tasks you run, and the steps you take. A default context is always available, but you can also create your own for specific projects.&#x20;
 
@@ -88,7 +143,7 @@ This will return a list of operations, like:
 
 Each operation is a task you can perform in kiara, such as creating a table, calculating network metrics, or exporting files.&#x20;
 
-## Downloading a file&#x20;
+## Download a file&#x20;
 
 Now that kiara is set up, let's bring a file into our notebook using the `download.file` operation. &#x20;
 
@@ -126,7 +181,7 @@ kiara.store_value(value=downloaded_file.value_id, alias='Journal_Nodes')
 
 Now, `Journal_Nodes` is saved in kiara's internal storage. You can refer to it later just by its alias, just like using a variable in Python.&#x20;
 
-## Converting the file into a table
+## Convert the file into a table
 
 Now that we have downloaded the file, let's turn it into a table so we can work with the data.&#x20;
 
@@ -184,7 +239,7 @@ kiara.store_value(value=outputs_table.value_id, alias="Journal_Nodes_table")
 
 Now, your data is saved inside kiara and can be accessed at any time using the name `Journal_Nodes_table`.
 
-## Querying your data
+## Query your data
 
 Now that we have downloaded the file and converted it into a table, we can start exploring the data. One simple way to do that is by running SQL queries directly on the table using κiara.
 
@@ -242,7 +297,7 @@ outputs
 
 This returns a smaller table with only the Berlin-based general medicine journals.
 
-## Recording and tracing your data
+## Record and trace your data
 
 Now that we’ve transformed and queried our data, let's review what κiara knows about the outputs we've created and how it tracks changes.
 
@@ -276,4 +331,14 @@ This shows a chain of operations:
 * The original file that was downloaded (`download.file`)
 
 Each input is assigned a unique ID, allowing complete transparency and traceability.
+
+## Network analysis with kiara
+
+Now that we're comfortable with what kiara looks like and what it can do to help track your data and your research process, let's try out some of the digital analysis tools, starting with network analysis.
+
+## Why network analysis?
+
+Network analysis offers a computational and quantitative means to examine and explore relational objects, with proxies to measure structural roles and concepts such as power and influence. Doing so digitally - and at scale - also allows us to consider these kinds of questions with large amounts of material or documents that were not heretofore manageable with qualitative or manual approaches.
+
+We will not get into any core network theories or their uses in the humanities here, as we're focused on the ways in which network analysis in kiara offers an interesting way to wrap the research process, and think about the decisions we're making and how to trace them. If you're interested in learning more about network analysis, or how to code using [NetworkX](https://networkx.org/), the library currently used in these kiara modules, check out our recommended reading at the bottom.
 
