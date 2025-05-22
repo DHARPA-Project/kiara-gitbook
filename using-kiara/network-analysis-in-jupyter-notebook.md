@@ -204,14 +204,14 @@ kiara.retrieve_operation_info(op_id)
 
 From this, we learn:
 
-Inputs
+**Inputs**
 
 * Required: a file.
 * Optional:
   * `first_row_is_header` – indicates if the first row of a CSV file contains column headers.
   * `delimiter` – specifies the column separator (only for CSV), used if kiara cannot auto-detect it.
 
-Outputs
+**Outputs**
 
 * A `table` object, which can be used in the next steps.
 
@@ -344,7 +344,7 @@ We will not get into any core network theories or their uses in the humanities h
 
 ## Get started
 
-Before we begin exploring network analysis, let's make sure everything is ready.
+Before we begin exploring **network analysis**, let's make sure everything is ready.
 
 In this step, we will check that the necessary plugins are available and set up the Kiara API, which is the interface that allows us to run Kiara commands inside our Jupyter notebook.
 
@@ -369,7 +369,7 @@ csv_file_path = os.path.join(notebook_path,"data/CKCC.csv")
 
 Great, we are all set up. We are now going to import some data again using the kiara function `import.local.file`. This function will allow you to bring in a local file, one stored on your computer. We're using sample data, but you can also use this function to import your own data.
 
-The dataset we’re using is a sample from the Circulation of Knowledge and Learned Practices in the 17th-century Dutch Republic (CKCC) collection, compiled by the Huygens Institute in the Netherlands and made available on the LetterSampo portal, part of the Reassembling the Republic of Letters project. You can find more information about these projects [here](https://seco.cs.aalto.fi/projects/rrl/).
+The dataset we’re using is a sample from the **Circulation of Knowledge and Learned Practices in the 17th-century Dutch Republic (CKCC)** collection, compiled by the Huygens Institute in the Netherlands and made available on the LetterSampo portal, part of the Reassembling the Republic of Letters project. You can find more information about these projects [here](https://seco.cs.aalto.fi/projects/rrl/).
 
 This collection includes about 20,000 letters written by and to 17th-century scholars in the Dutch Republic. By using network analysis, we can explore questions such as:
 
@@ -379,7 +379,9 @@ This collection includes about 20,000 letters written by and to 17th-century sch
 
 While network analysis can be used to explore and map unknown datasets, in this case, we already know something about the data. The research questions and module parameters in this notebook have been shaped by that prior knowledge. That is important to keep in mind as we proceed.
 
-Let’s now use the `import.local.file` module from Kiara to access our CSV file. We will specify the path to the CSV file in our inputs and save the outputs of the function as 'CKCC'.
+Let’s now use the `import.local.file` module from Kiara to access our CSV file. We will specify the path to the CSV file in our inputs and save the outputs of the function as '**CKCC**'. Alternatively, we can use the `download.file` module used in the **Hello Kiara** notebook.
+
+We will leave the comments blank here for you to fill in yourself, but the comment here might indicate why you have chosen this dataset, or a reminder of which version you are working with if you have multiple versions of the same dataset.
 
 ```
 CKCC = kiara.run_job('import.local.file', inputs={'path': csv_file_path}, comment="importing bits")
