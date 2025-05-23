@@ -391,7 +391,7 @@ CKCC = kiara.run_job('import.local.file', inputs={'path': csv_file_path}, commen
 
 Now that we’ve imported our data, it’s time to build a network from it.&#x20;
 
-As with most network analysis tools, kiara requires the data to be in the form of an **edge** table first. An edge table shows the connections or relationships between different entities, in this case, between senders and recipients of letters. Later, we could also add a table with nodes (the individual entities), but that is optional, and we will skip it for now.
+As with most network analysis tools, kiara requires the data to be in the form of an **edge** table first. An edge table shows the connections or relationships between different entities, in this case, between senders and recipients of letters. Later, we could also add a table with **nodes** (the individual entities), but that is optional, and we will skip it for now.
 
 To transform our CSV file into an edge table, we will use the `create.table.from.file` function that we used in the first notebook. We will save this table in a variable called **CKCC**, which we will reuse later on.
 
@@ -500,3 +500,55 @@ CKCC_largest_component
 
 ## Structural measures
 
+Now that we’ve extracted the largest component of the network, we can calculate some basic structural measures: the **average path length** and the **diameter** of the network.
+
+These kinds of calculations only work on connected graphs (i.e., networks with only one component) or if we've extracted the largest component already.
+
+Let’s take a look at the **diameter**:
+
+```
+
+diameter = kiara.run_job('calculate.diameter', inputs={'network_component':CKCC_largest_component['largest_component']}, comment='c')
+diameter
+```
+
+And now for the **average path length**:
+
+```
+avg_path = kiara.run_job('calculate.average_path', inputs={'network_component':CKCC_largest_component['largest_component']}, comment='c')
+avg_path
+```
+
+These two metrics give us an idea of the overall sturcture of the network:
+
+* The **diameter** tells us the longest shortest path between any two nodes in the network—in this case, 7 steps.
+* The **average path length** tells us, on average, how many steps it takes to get from one node to another—about 2.7 in this case.
+
+## Statistical measures
+
+Now that we have created our graph, we can start doing some of the more analytical work. Let’s begin by exploring some common measurements that assess the value or importance of individual nodes within the network.
+
+## Degree
+
+We will begin with degree, using kiara's [`create.degree_rank_list`](#user-content-fn-1)[^1] module. This module allows us to calculate degree as both **undirected** and **weighted**. In this epistolary network, **undirected** **degree** counts the number of individual correspondents each person has, whereas **weighted** **degree** counts the total number of incoming and outgoing letters for each actor in the network.
+
+Let's use our `retrieve_operation_info` function to check what we need to calculate these degrees:
+
+```
+kiara.retrieve_operation_info('calculate.degree_score')
+```
+
+Nice and simple. We just need to provide the network graph we created in `assemble.network_graph`.
+
+Let’s give it a go then:
+
+```
+output = kiara.run_job('calculate.degree_score', inputs={'network_graph':CKCC['network_graph']}, comment="")
+output
+```
+
+This function creates a table showing the undirected degree of each node. Since it automatically detects that the network is weighted (based on how it was created), it also calculates the weighted degree for each node. It has also assigned the two degree scores as node attributes in our network, which means we can keep these for further centrality measurements, allowing us to accumulate different scores rather than overwriting them each time.
+
+## Betweeness
+
+[^1]: This should be replaced with calculate.degree\_score?
