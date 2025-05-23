@@ -391,9 +391,9 @@ CKCC = kiara.run_job('import.local.file', inputs={'path': csv_file_path}, commen
 
 Now that we’ve imported our data, it’s time to build a network from it.&#x20;
 
-As with most network analysis tools, Kiara requires the data to be in the form of an edge table first. An edge table shows the connections or relationships between different entities, in this case, between senders and recipients of letters. Later, we could also add a table with nodes (the individual entities), but that is optional, and we will skip it for now.
+As with most network analysis tools, kiara requires the data to be in the form of an **edge** table first. An edge table shows the connections or relationships between different entities, in this case, between senders and recipients of letters. Later, we could also add a table with nodes (the individual entities), but that is optional, and we will skip it for now.
 
-To transform our CSV file into an edge table, we will use the `create.table.from.file` function that we used in the first notebook. We will save this table in a variable called CKCC, which we will reuse later on.
+To transform our CSV file into an edge table, we will use the `create.table.from.file` function that we used in the first notebook. We will save this table in a variable called **CKCC**, which we will reuse later on.
 
 Before running it, we should check the input requirements of the function, just to make sure we are using it correctly. You can do that with the following command:
 
@@ -432,7 +432,7 @@ network_info = kiara.run_job('preview.network_info', inputs=inputs, comment="")
 network_info
 ```
 
-This function gives us the total number of nodes, but it also helps us think about how different types of graphs  - directed, undirected, multi-directed, and multi-undirected - might affect the number of edges in the network.
+This function gives us the total number of nodes, but it also helps us think about how different types of graphs  - **directed**, **undirected**, **multi-directed**, and **multi-undirected** - might affect the number of edges in the network.
 
 We see that there are more edges in a directed graph than in an undirected graph. This suggests that there are reciprocal or directed edges between a pair of nodes, something typical in an epistolary network, where people are writing back and forth to each other.&#x20;
 
@@ -444,7 +444,7 @@ So, in addition to helping us decide what graph type is most useful for our data
 
 Having access to this kind of information means we can make more informed decisions about the next steps of our research or digital analysis, especially those that are sometimes automated for us.
 
-For our network, a directed graph makes the most sense.&#x20;
+For our network, a **directed graph** makes the most sense.&#x20;
 
 Let's now look at what we need to build one with our `assemble.network_graph` module using `kiara.retrieve_operation_info`.
 
@@ -452,23 +452,25 @@ Let's now look at what we need to build one with our `assemble.network_graph` mo
 kiara.retrieve_operation_info('assemble.network_graph')
 ```
 
-## Assemble the network&#x20;
+## Graph decisions
 
-This might seem like a chunky module, but it gets us to do a lot of important decision-making up front. This means that we don't have to keep inputting these decisions later on when we do some more analytical stuff.&#x20;
+This might seem like a chunky module, but it is doing a lot of important work up front. By making these decisions now, we will not have to make them later on when we move on to the more analytical parts.&#x20;
 
-If we change our mind about the kind of graph we want to use later on, we can always come back to this step. The `preview.network_info` function is useful because it allows us to get the information we need to make an informed decision about our network early on.
+If we change our mind later about the kind of graph we want to use, we can always come back and rerun this step. This is why the `preview.network_info` function is very useful. It allows us to make an informed decision about our network early on.
 
-We already decided that we want to make a directed network, so we can select 'directed' for graph type, and we created our edge table as 'edges' earlier, so we can pop that back in. We also need to specify our Source and Target columns again, and we can copy all this information from our preview module. We do not have a node table for this dataset, but if we did, now is where we would include it.
+We have already decided that we want to make a directed network, so we will select 'directed' for graph type. We created our edge table earlier and saved it as 'edges', so we can load that back in. We also need to specify our Source and Target columns again, and we can copy all this information from our preview module.&#x20;
 
-Now, we can make some more decisions that we have not seen yet. One is deciding whether our network is weighted or not, which might mean a number of things, depending on the data you are using - the number of letters between correspondents, the distance between them, the number of years they have known each other. If all the relationships between nodes in the network are the same, we can set this as False; if not, we need to tell kiara where this weight information is coming from.
+We do not have a node table for this dataset, but if we did, this would be the place to include it.
 
-If weights already exist in the edges table, for example, you've already assigned weights to the network before uploading the data into kiara, you can just pick the weight column and move on, or choose to do something more with them. If you have parallel edges (which the `preview.network_info` module will have told you) and you don't want to use a multigraph, you can choose how you want to handle weighted parallel edges. You can either: add all the weights together ('sum'); calculate the average weight for the merged edge ('mean'); find the largest value ('maximum'); or find the smallest value ('minimum'). This will then assign this value as the new weight for this edge in the network.
+Now, we can make some more decisions that we have not seen yet. One of the most important is deciding whether our network is **weighted** or **unweighted.** This can mean different things depending on your data, such as the number of letters between correspondents, the distance between them, or the number of years they have known each other. If all the relationships between nodes in your network are the same, we can set `is_weighted` to `False`.  But if not, we need to tell kiara where this weight information is coming from.
 
-If you want _kiara_ to calculate the weights for you, you can select 'sum' and total the number of occurences of this edge as a weight. Note that if you haven't provided any weights already, the edges will be automatically assigned a weight of 1, so choosing 'mean', 'minimum', or 'maximum' for this will just return a value of 1 for every edge, which will count the same as an unweighted network.
+If weights already exist in the edges table, for example, if you have already assigned weights to the network before uploading the data into kiara, then you can just select the weight column. In case your graph contains parallel edges, which we would already know exist from the `preview.network_info` , and you prefer not to use a multigraph, you can specify how to handle these weighted parallel edges. You can choose to aggregate the weights of the parallel edges by summing them `sum` . calculating their average weight `mean` , finding the highest value `maximum` , or the lowest `minimum`. Each of these choices will assign a single value as the new weight for that edge in the network.&#x20;
 
-The inputs for this module are prompting us to reflect on the decisions we are making as we are going along, and think about how our data fits into these kind of measurements, but by doing it in _kiara_, these inputs also allows us to _track_ these decisions, both in terms of storing the processes and with the comments we are adding in.
+If you want kiara to calculate the weights for you, you can choose `sum` , which will count the total number of times each edge appears and use that as the weight. Keep in mind that if you have not provided any weights in the data, kiara will automatically assign a weight of 1 to each edge. In that case, selecting `mean` , `minimum`, or `maximum` will simply return 1 for every edge, making the result he same as an **unweighted** network.
 
-We're still working with our letter dataset, so let's get _kiara_ to add all the edges together so that the weight will tell us how many letters each person wrote to each other.
+The inputs for this module encourage us to reflect on the decisions we are making as we go, and think about how our data fits into these kinds of measurements. By working through these steps in kiara, we are not only making choices but also documenting them. Kiara tracks these decisions, both through the way the process is stored and through the comments we can include along the way.
+
+Since we are still working with our letter dataset, we will ask kiara to add all the edges together so that the weight will tell us how many letters each person wrote to each other.
 
 ```
 inputs = {
@@ -483,4 +485,18 @@ inputs = {
 CKCC = kiara.run_job('assemble.network_graph', inputs=inputs, comment="")
 CKCC
 ```
+
+Great, this has created a Kiara network graph object. The output includes both an edge table and a node table for the network.
+
+Since we did not provide a separate node table, kiara has automatically extracted the node information from the edges. If you look at the edge table now, you will see that it includes weights, calculated according to the decision we just made.&#x20;
+
+As we saw earlier in the `preview.network_info` module, the network consists of eight separate components. We might want to focus on just the main component, which includes the most nodes. To do this, we can extract the largest component and return it as its own network graph.&#x20;
+
+```
+CKCC_largest_component = kiara.run_job('extract.largest_component', inputs={'network_graph':CKCC['network_graph']}, comment="")
+
+CKCC_largest_component
+```
+
+## Structural measures
 
