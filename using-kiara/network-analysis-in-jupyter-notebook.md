@@ -2,9 +2,9 @@
 
 ## Install kiara&#x20;
 
-Before running any notebook, you will need to install kiara on your computer using the **command-line interface (CLI)**. We will guide you through the process step by step.
+Before running any notebook, you need to install kiara on your computer using the **command-line interface (CLI)**. The following step will guide you through the process.
 
-To begin, you must install **conda** or **miniconda**, which are tools for managing software environments and dependencies. We recommend installing miniconda, which is the lighter version of conda. Installation instructions for miniconda can be found [here](https://docs.anaconda.com/miniconda/).&#x20;
+To begin, you must install **conda** or **miniconda**, which are tools for managing software environments and dependencies. We recommend installing miniconda, which is the lighter version of conda. You can find installation instructions for miniconda [here](https://docs.anaconda.com/miniconda/).&#x20;
 
 Be sure to download the right version for your operating system (Windows, macOS, or Linux).
 
