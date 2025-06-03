@@ -61,13 +61,13 @@ Before we get started with **network analysis**, we need to check whether kiara 
 
 There are seven plugins:&#x20;
 
-* [`kiara_plugin.core-types`](https://dharpa.org/kiara_plugin.core_types/latest/)
-* [`kiara_plugin.onboarding`](https://dharpa.org/kiara_plugin.onboarding/latest/)
-* [`kiara_plugin.tabular`](https://dharpa.org/kiara_plugin.tabular/latest/)
-* [`kiara_plugin.network_analysis`](https://dharpa.org/kiara_plugin.network_analysis/latest/)
-* [`kiara_plugin.language_processing`](https://dharpa.org/kiara_plugin.language_processing/latest/)
-* [`kiara_plugin.html`](https://dharpa.org/kiara_plugin.html/latest/)
-* [`kiara_plugin.streamlit`](https://dharpa.org/kiara_plugin.streamlit/latest/)
+* `kiara_plugin.core-types`
+* `kiara_plugin.onboarding`
+* `kiara_plugin.tabular`
+* `kiara_plugin.network_analysis`
+* `kiara_plugin.language_processing`
+* `kiara_plugin.html`
+* `kiara_plugin.streamlit`
 
 To install these, first launch **Jupyter** from the command line by running:
 
@@ -379,7 +379,7 @@ This collection includes about 20,000 letters written by and to 17th-century sch
 
 While network analysis can be used to explore and map unknown datasets, in this case, we already know something about the data. The research questions and module parameters in this notebook have been shaped by that prior knowledge. That is important to keep in mind as we proceed.
 
-Let’s now use the `import.local.file` module from Kiara to access our **CSV file**. We will specify the path to the CSV file in our inputs and save the outputs of the function as '**CKCC**'. Alternatively, we can use the `download.file` module used in the **Hello Kiara** notebook.
+Let’s now use the `import.local.file` module from kiara to access our **CSV file**. We will specify the path to the CSV file in our inputs and save the outputs of the function as '**CKCC**'. Alternatively, we can use the `download.file` module used in the **Hello Kiara** notebook.
 
 We will leave the comments blank here for you to fill in yourself, but the comment here might indicate why you have chosen this dataset, or a reminder of which version you are working with if you have multiple versions of the same dataset.
 
