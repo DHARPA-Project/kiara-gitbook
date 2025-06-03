@@ -95,7 +95,7 @@ ensure_kiara_plugins()
 
 Now that the plugins are ready, let's set up kiara itself.
 
-To start using kiara in **Jupyter**, you need to create an **instance** of the `kiaraAPI`. This API provides access to kiara's functions, enabling you to interact with and control your **data workflows**.
+To start using kiara in **Jupyter**, you need to create an **instance** of the `kiaraAPI`. This API provides access to kiara's **functions**, enabling you to interact with and control your **data workflows**.
 
 To set this up, run the following code in a notebook cell:
 
