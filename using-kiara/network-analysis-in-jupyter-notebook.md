@@ -77,7 +77,7 @@ jupyter notebook
 
 This will open the Jupyter notebook in your default web browser.&#x20;
 
-In a notebook cell, run the following code:
+In a **notebook cell**, run the following code:
 
 ```
 try:
