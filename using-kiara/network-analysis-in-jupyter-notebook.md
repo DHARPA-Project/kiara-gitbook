@@ -153,7 +153,7 @@ To understand what this operation does and what information it needs, run:
 kiara.retrieve_operation_info('download.file')
 ```
 
-We’ll now download a sample **CSV file** using this operation. First, we define the input (the file **URL** and **name**) and then run the job:
+We’ll now download a sample **CSV file** using this operation. First, we define the **input** (the file **URL** and **name**) and then run the job:
 
 ```
 inputs = {
@@ -164,7 +164,7 @@ inputs = {
 outputs = kiara.run_job('download.file', inputs=inputs, comment="importing journal nodes")
 ```
 
-This gives you a **file object** as output, including the downloaded file and some technical metadata. Let’s print it to confirm:
+This gives you a **file object** as **output**, including the downloaded file and some technical metadata. Let’s print it to confirm:
 
 ```
 outputs
@@ -179,7 +179,7 @@ downloaded_file = outputs['file']
 kiara.store_value(value=downloaded_file.value_id, alias='Journal_Nodes')
 ```
 
-Now, `Journal_Nodes` is saved in kiara's internal storage. You can refer to it later just by its **alias**, just like using a variable in Python.&#x20;
+Now, `Journal_Nodes` is saved in kiara's internal storage. You can refer to it later just by its alias, just like using a variable in Python.&#x20;
 
 ## Convert the file into a table
 
@@ -191,9 +191,9 @@ We can look through kiara’s available operations by filtering for those that s
 kiara.list_operation_ids('create')
 ```
 
-This shows a list of operations. Since we’re working with a **CSV file**, the one we want is `create.table.from.file` .
+This shows a list of operations. Since we’re working with a CSV file, the one we want is `create.table.from.file` .
 
-This operation will read the file and turn it into a structured table.
+This operation will read the file and turn it into a **structured table**.
 
 To see what inputs and outputs this operation expects, run:
 
@@ -215,7 +215,7 @@ From this, we learn:
 
 * A `table` object, which can be used in the next steps.
 
-Let’s turn the downloaded file (which we saved earlier under the alias `Journal_Nodes`) into a table:
+Let’s turn the downloaded file (which we saved earlier under the alias `Journal_Nodes`) into a **table**:
 
 ```
 inputs = {
@@ -228,9 +228,9 @@ outputs = kiara.run_job(op_id, inputs=inputs, comment="")
 outputs
 ```
 
-This will process the CSV file and show the result as a **table** with columns and rows.
+This will process the CSV file and show the result as a **table** with **columns** and **rows**.
 
-To make it easier to reuse the table later, we can save it in kiara under a new **alias**:
+To make it easier to reuse the table later, we can save it in kiara under a **new** **alias**:
 
 ```
 outputs_table = outputs['table']
@@ -261,7 +261,9 @@ Since we are working with a table, we will use:
 kiara.retrieve_operation_info('query.table')
 ```
 
-This tells us that `query.table` allows us to write an **SQL query** to explore the data. The required inputs are:
+This tells us that `query.table` allows us to write an **SQL query** to explore the data.&#x20;
+
+The required inputs are:
 
 * `table`: the data you want to query
 * `query`: your SQL statement
@@ -359,7 +361,7 @@ kiara = KiaraAPI.instance()
 
 ## Import data
 
-Next, we will set up the **filepaths** for the data that we are going to use in this notebook. The data file is stored in the same directory as the two jupyter notebooks. To set the file path, you can either save the full path to the csv file in the variable below, or use the `os.path` modules in Python to shorten this, as below:&#x20;
+Next, we will set up the **filepaths** for the data that we are going to use in this notebook. The data file is stored in the same directory as the two Jupyter notebooks. To set the file path, you can either save the full path to the CSV file in the variable below, or use the `os.path` modules in Python to shorten this, as below:&#x20;
 
 ```
 notebook_path = os.path.abspath('')
