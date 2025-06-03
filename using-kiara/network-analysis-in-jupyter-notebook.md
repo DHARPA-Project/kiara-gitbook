@@ -420,7 +420,7 @@ edges = outputs['table']
 outputs
 ```
 
-## Preview the network structure
+## Preview the network structure <mark style="color:red;">(This doesn't work. There is no</mark> `preview.network_info`<mark style="color:red;">)</mark>
 
 Now that we have our edges formatted as a kiara table, we are ready to make our **network graph**. But before we do that, it is helpful to preview the structure of the network using kiara’s `preview.network_info` function. All we need to do is select our **edges table** and the column names for our **sources** and **targets** by running:
 
