@@ -551,4 +551,165 @@ This function creates a table showing the undirected degree of each node. Since 
 
 ## Betweeness
 
+Let's look at a different centrality measure now. We will use `retrieve_operation_info` again to see what we need to calculate **betweenness** for the nodes in our network:
+
+```
+kiara.retrieve_operation_info('calculate.betweenness_score')
+```
+
+This module asks us to define how we want our weights to be interpreted – is the weight `'positive'`, indicating **strong relationships**, or is it `'negative'`, acting as a **distance** or **time needed** for these edges? Whilst this is often automated in network measures, kiara prompts us to think more carefully about our data and our network. This again allows us to trace the decisions we as researchers are making about our analysis.\
+
+
+As we're dealing with **epistolary data**, we'll leave this input as `'True'`, as the weight indicates **strength**. At this stage, the module is also set to calculate both **unweighted** and **weighted betweenness** using the network as a **directed graph**. Though this is another **pre-made** decision for this notebook and the dataset in use, it's important to acknowledge this and be as transparent about these kinds of choices as the ones actively documented by user input.
+
+Let’s give it a go then. We want to use the network we just created using the degree ranking module, so let's save that and use it in our inputs:
+
+```
+network_graph = output['centrality_network']
+
+output = kiara.run_job('calculate.betweenness_score', inputs={'network_graph':network_graph}, comment="")
+
+output
+```
+
+Just like the degree module, it has returned a table with the two **betweenness scores**, ranked by unweighted, and also assigned these as **node attributes** that we can carry forward into more measurements.
+
+Let’s look at one more centrality here in this notebook.
+
+## Eigenvector
+
+kiara also includes a module to measure **eigenvector centrality**, so let's look at what that needs:
+
+```
+kiara.retrieve_operation_info('calculate.eigenvector_score')
+```
+
+This module is set up similarly to the betweenness measure, and again we can define how to interpret the weights. If you have a larger dataset, you can also adjust the number of iterations for the calculation. For now, we'll leave the parameters as they are and use our updated network graph, which already has **degree** and **betweenness** scores attached.
+
+```
+network_graph = output['centrality_network']
+
+output = kiara.run_job('calculate.eigenvector_score', inputs={'network_graph':network_graph}, comment="")
+
+output
+```
+
+As before, we now have a **score table** and updated **node attributes** in the network graph — great!
+
+There is one final centrality measure available in the network analysis plugin: **closeness**. See if you can figure out how to check the information for this and run it on the network here, or feel free to move on to exploring other measures.
+
+## Modularity Group
+
+This next module determines the **modularity groups** in the network, again assigning each group as a **node attribute**. Let’s have a look at the parameters for it:
+
+```
+kiara.retrieve_operation_info('compute.modularity_group')
+```
+
+Here, we can either **set the number of communities** we want the module to divide the network into, or we can allow the code to find this automatically.
+
+Let’s give it a go with our network once more:
+
+```
+network_graph = output['centrality_network']
+
+output = kiara.run_job('compute.modularity_group', inputs={'network_graph':network_graph, 'number_of_communities':10}, comment="")
+
+output
+```
+
+Great — this once again gives us our **updated network**, and also tells us how many **modularity groups** the measure has found in the network.
+
+Let's look at one last measure.
+
+## Cut points
+
+This last function finds all the **cut-points** in the network — these are nodes which, if removed, would split the component into two or more separate pieces. The function returns a **list of cut-points**, and also assigns each node a **'Yes'** or **'No'** as a node attribute to indicate whether it is a cut-point.
+
+Let’s have a look one last time:
+
+```
+kiara.retrieve_operation_info('create.cut_point_list')
+```
+
+Nice and simple — no extra parameters needed: it just requires our network.
+
+It’s worth pointing out that the **cut-point** function in **NetworkX** does not work on **directed** or **multidirected** graphs. If you are using one of these graph types, this `create.cut_point_list` function will first convert the graph into an **undirected** version to perform the calculation, and then it will return the results in your original directed graph. This does not affect the metrics, but it’s good to know!
+
+Let’s run it on our network:
+
+```
+network_graph = output['modularity_network']
+
+output = kiara.run_job('create.cut_point_list', inputs={'network_graph':network_graph}, comment="")
+
+output
+```
+
+As with the previous modules, this gives us an updated **node table** with a new **Cut Point** column (`Yes` or `No`), and a **list** **of nodes** that are identified as cut-points.
+
+Having started simply with an imported CSV of letter edges, we've now got a lot of information. This is great — but what next?
+
+## Export the network
+
+kiara has stored all of the information we’ve just created, and because it’s **interoperable**, it also allows us to **export** the network again.
+
+We can export this network data as a set of **CSVs**, or as one of several **network file formats** (such as **graphml** or **gexf**) using built-in kiara modules like this:
+
+```
+kiara.retrieve_operation_info('export.network_graph')
+```
+
+From this, we can work with our kiara network object in other software — for example, to do **further analysis** or to create **visualisations**!
+
+Give it a go yourself!
+
+Finally, we can check out the **lineage** for our final `cut_network` output. This shows how **all of our decisions** were stored — and how they shaped the creation of our network — all the way from the original import step.
+
+```
+lineage = kiara.retrieve_augmented_value_lineage(output['cut_network'])
+from observable_jupyter import embed
+embed('@dharpa-project/kiara-data-lineage', cells=['displayViz', 'style'], inputs={'dataset':lineage})
+```
+
+## Onboarding data: an alternative
+
+So far, we have created a network object in kiara by importing a **CSV** from a local path.
+
+But what about other formats? Let’s pause quickly and look at how to import a **GML file** instead.
+
+Here we will use a different sample dataset, a [co-appearance network](http://www-personal.umich.edu/~mejn/netdata/) of characters in Victor Hugo's novel _Les Miserables_, which is already in GML format.
+
+Let’s take a look at the function `import.network_graph.from.file` and how it works:
+
+```
+kiara.retrieve_operation_info('import.network_graph.from.file')
+```
+
+For this, we only need the **path** to the file we want to use — there is no need to import it into kiara first, as this module takes care of everything in one step.
+
+If the **node labels** in your GML file are named something other than `'id'`, you can specify that using the `label` input. If the **weight column** in your file has a different name (for example, in the _Les Misérables_ graph it is `'value'`), you can specify that too — kiara will then rename it to `'weight'` so that further metrics can use the weighted edges.
+
+Let’s try it:
+
+```
+lesmis_path = os.path.join(notebook_path,"data/lesmis.gml")
+
+lesmis = kiara.run_job('import.network_graph.from.file', inputs={'path': lesmis_path, 'file_type':'gml', 'weight_column':'value'}, comment="")
+lesmis
+```
+
+As we can see, this module **not only imports the GML file** into kiara, but also **automatically converts it** into a kiara network object for us — great!
+
+Notice that the **edge table** now uses the column name `'weight'`, which was automatically updated from `'value'` to match kiara’s expected format for edge weights.
+
+This network can now be used in degree calculations, just like we did before:
+
+```
+output = kiara.run_job('calculate.degree_score', inputs={'network_graph':lesmis['network_graph']}, comment="")
+output
+```
+
+We’ll leave this _Les Misérables_ network here — but it’s useful to see this **alternative option** for importing data for networks. If you want to experiment with this dataset more, feel free to give it a try!
+
 [^1]: This should be replaced with calculate.degree\_score?
