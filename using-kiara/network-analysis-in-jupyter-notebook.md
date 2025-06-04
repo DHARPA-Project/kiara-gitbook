@@ -87,7 +87,7 @@ kiara_plugin.onboarding   0.5.2
 kiara_plugin.tabular      0.5.6
 ```
 
-**Note**: For the lineage visuals later, make sure to run:
+**Note**: For network analysis and lineage visualization also install:
 
 ```
 pip install observable_jupyter
