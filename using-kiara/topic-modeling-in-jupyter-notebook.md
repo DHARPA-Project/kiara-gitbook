@@ -1,8 +1,8 @@
 ---
-description: '-outdated-'
+description: '-OUTDATED-'
 ---
 
-# Natural Language Processing in jupyter notebook
+# Topic modeling in jupyter notebook
 
 ## Installing kiara and its plugins
 
