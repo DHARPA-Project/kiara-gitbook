@@ -381,17 +381,17 @@ Now that you are comfortable with what kiara looks like and what it can do to he
 
 ## Why network analysis?
 
-Network analysis offers a **computational** and **quantitative** means to examine and explore **relational objects**, with proxies to **measure** **structural roles** and **concepts** such as power and influence. Doing so digitally - and **at scale** - also allows us to consider these kinds of questions with large amounts of material or documents that were not heretofore manageable with qualitative or manual approaches.
+Network analysis offers a computational and quantitative means to examine and explore **relational objects**, with proxies to **measure** structural roles and concepts such as power and influence.&#x20;
 
-You will not get into any core network theories or their uses in the humanities here, as you are focused on the ways in which network analysis in kiara offers an interesting way to wrap the research process, and think about the decisions you are making and how to trace them. If you're interested in learning more about network analysis, or how to code using [NetworkX](https://networkx.org/), the library currently used in these kiara modules, check out our recommended reading at the bottom.
+Doing this digitally, and **at scale**, enables you to ask questions of large datasets that would be impossible to answer qualitatively.
+
+This tutorial is not a deep dive into network theory or its applications in the humanities. Rather, you will focus on how using kiara helps you structure your workflow, document your decisions, and trace the transformations your data undergoes during analysis.
 
 ## Get started
 
-Before you begin exploring **network analysis**, let's make sure everything is ready.
+Before you begin, you will check that the necessary plugins are available and set up the `kiaraAPI`, the interface that allows us to run kiara commands inside your Jupyter notebook.
 
-In this step, you will check that the necessary **plugins** are available and set up the `kiaraAPI`, which is the interface that allows us to run Kiara commands inside our Jupyter notebook.
-
-This is the code to get started:
+Here is the code to get started:
 
 ```
 import networkx as nx
@@ -400,9 +400,13 @@ from kiara.api import KiaraAPI
 kiara = KiaraAPI.instance()
 ```
 
-## Import data
+## Set up your data path
 
-Next, you will set up the **filepaths** for the data that you are going to use in this notebook. The data file is stored in the same directory as the two Jupyter notebooks. To set the file path, you can either save the full path to the CSV file in the variable below, or use the `os.path` modules in Python to shorten this, as below:&#x20;
+Next, you need to set the **file path** to the data you will use in this notebook.&#x20;
+
+In this example, the CSV file is stored in the same directory as the notebook, inside a subfolder named `data`.&#x20;
+
+You can either write out the full file path, or use Python's `os.path` module to construct it, as below:&#x20;
 
 ```
 notebook_path = os.path.abspath('')
@@ -410,21 +414,31 @@ notebook_path = os.path.abspath('')
 csv_file_path = os.path.join(notebook_path,"data/CKCC.csv")
 ```
 
-Great, you are all set up. You are now going to import some data again using the kiara function `import.local.file`. This function will allow you to bring in a local file, one stored on your computer. You are using sample data, but you can also use this function to import your own data.
+## About the dataset
 
-The dataset you are using is a sample from the **Circulation of Knowledge and Learned Practices in the 17th-century Dutch Republic (CKCC)** collection, compiled by the Huygens Institute in the Netherlands and made available on the LetterSampo portal, part of the Reassembling the Republic of Letters project. You can find more information about these projects [here](https://seco.cs.aalto.fi/projects/rrl/).
+The dataset you are working with comes from the _Circulation of Knowledge and Learned Practices in the 17th-century Dutch Republic (CKCC)_ collection.
 
-This collection includes about 20,000 letters written by and to 17th-century scholars in the Dutch Republic. By using network analysis, you can explore questions such as:
+This corpus of around 20,000 letters exchanged between scholars in the Dutch Republic during the 17th century. It was compiled by the Huygens Institute in the Netherlands and is available through the LetterSampo portal as part of the _Reassembling the Republic of Letters_ project.&#x20;
+
+By applying network analysis, you can explore questions such as:
 
 * Who was the most prolific writer?
 * Which actor connected the most people?
 * Who operated in closely knit writing groups?
 
-While network analysis can be used to explore and map unknown datasets, in this case, you already know something about the data. The research questions and module parameters in this notebook have been shaped by that prior knowledge. That is important to keep in mind as you proceed.
+Although network analysis can be used to explore unfamiliar datasets, in this case, you already have some prior knowledge of the material. The research questions and parameter choices in this notebook reflect that prior knowledge — something to keep in mind as you proceed.
 
-Let’s now use the `import.local.file` module from kiara to access our **CSV file**. You will specify the path to the CSV file in our inputs and save the outputs of the function as '**CKCC**'. Alternatively, you can use the `download.file` module used in the **Hello Kiara** notebook.
+## Import data
 
-You will leave the comments blank here for you to fill in yourself, but the comment here might indicate why you have chosen this dataset, or a reminder of which version you are working with if you have multiple versions of the same dataset.
+Now you will import the data using kiara's `import.local.file` operation.&#x20;
+
+This module allows you to import any local file - in this case, your CSV file. You are using a sample dataset here, but you can also use this same module to import your own data.
+
+You will pass the file path you defined earlier as an input. You will also save the output of this operation under the alias 'CKCC'. Alternatively, you can use the `download.file` module mentioned above.
+
+You can leave the `comment` field empty for now — or you might use it to note why you chose this dataset, or which version you are working with (if you have multiple versions of the same data).
+
+Here is the code:
 
 ```
 CKCC = kiara.run_job('import.local.file', inputs={'path': csv_file_path}, comment="importing bits")
@@ -434,19 +448,21 @@ CKCC = kiara.run_job('import.local.file', inputs={'path': csv_file_path}, commen
 
 Now that you have imported our data, it’s time to build a **network** from it.&#x20;
 
-As with most network analysis tools, kiara requires the data to be in the form of an **edge** **table** first. An edge table shows the connections or relationships between different entities, in this case, between senders and recipients of letters. Later, you could also add a **node table** (the individual entities), but that is optional, and you will skip it for now.
+To create a network, kiara expects your data to be in the form of an **edge table**. An edge table lists relationships between entities — in this case, between senders and recipients of letters. Later, you could also add a **node table** (a table listing all the individual entities), but this is optional — you will skip it for now.
 
-To transform our CSV file into an edge table, you will use the `create.table.from.file` function that you used in the first notebook. You will save this table in a variable called **CKCC**, which you will reuse later on.
+## Convert your CSV into an edge table
 
-Before running it, you should check the input requirements of the function, just to make sure you are using it correctly. You can do that with the following command:
+To turn your CSV file into an edge table, you will use the `create.table.from.file` function that you used earlier.&#x20;
+
+You will first check what inputs this function requires:
 
 ```
 kiara.retrieve_operation_info('create.table.from.file')
 ```
 
-This will display useful information about the function, such as the **inputs** it needs and the **outputs** it produces.
+This will display helpful information about what inputs the function expects and what it returns.
 
-Now, you can turn our CSV data into a kiara table by loading the data file you imported earlier (the one stored in `CKCC`) and telling Kiara that the first row of the file contains the column headers. You can do that with the following command:
+Now, you can load your CSV data (which you imported earlier and stored in `CKCC`) and tell kiara that the first row contains column headers:
 
 ```
 inputs = {
@@ -461,7 +477,9 @@ edges = outputs['table']
 outputs
 ```
 
-## Preview the network structure <mark style="color:red;">(This doesn't work. There is no</mark> `preview.network_info`<mark style="color:red;">)</mark>
+At this point, you have created your **edges table**, which will serve as the basis for your network graph.
+
+## Preview the network structure&#x20;
 
 Now that you have our edges formatted as a kiara table, you are ready to make our **network graph**. But before you do that, it is helpful to preview the structure of the network using kiara’s `preview.network_info` function. All you need to do is select our **edges table** and the column names for our **sources** and **targets** by running:
 
