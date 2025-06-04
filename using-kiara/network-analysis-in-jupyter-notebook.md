@@ -66,18 +66,11 @@ To make kiara more useful, you will also install some basic **plugins** by runni
 pip install kiara_plugin.core_types kiara_plugin.onboarding kiara_plugin.tabular 
 ```
 
-For the lineage visuals later, make sure to run:
-
-```
-pip install observable_jupyter
-```
-
 These plugins provide support for:
 
 * core data types
 * helpful onboarding tools
 * tabular data (spreadsheets, CSVs, etc.)
-* linage visualization&#x20;
 
 To see which versions of kiara and its plugins are installed, you can run:
 
@@ -92,6 +85,12 @@ kiara                     0.5.13
 kiara_plugin.core_types   0.5.2
 kiara_plugin.onboarding   0.5.2
 kiara_plugin.tabular      0.5.6
+```
+
+**Note**: For the lineage visuals later, make sure to run:
+
+```
+pip install observable_jupyter
 ```
 
 ## Import kiara and create an API
