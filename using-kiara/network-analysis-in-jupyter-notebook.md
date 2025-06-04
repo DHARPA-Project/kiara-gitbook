@@ -481,7 +481,16 @@ At this point, you have created your **edges table**, which will serve as the ba
 
 ## Preview the network structure&#x20;
 
-Now that you have our edges formatted as a kiara table, you are ready to make our **network graph**. But before you do that, it is helpful to preview the structure of the network using kiara’s `preview.network_info` function. All you need to do is select our **edges table** and the column names for our **sources** and **targets** by running:
+Before you assemble your network graph, it is helpful to preview its structure.
+
+You can do this using kiara’s `preview.network_info` function.
+
+This function will show you:
+
+* How many nodes and edges the network contains
+* How the graph structure might change depending on whether you choose **directed**, **undirected**, **multi-directed**, or **multi-undirected** representations
+
+To run the preview, specify your edges table, along with the source and target columns:
 
 ```
 inputs = {'edges': edges,
@@ -493,45 +502,51 @@ network_info = kiara.run_job('preview.network_info', inputs=inputs, comment="")
 network_info
 ```
 
-This function gives us the total number of **nodes**, but it also helps us think about how different types of graphs  - **directed**, **undirected**, **multi-directed**, and **multi-undirected** - might affect the number of **edges** in the network.
+This preview will give you useful insights:
 
-You see that there are more edges in a **directed** graph than in an **undirected** graph. This suggests that there are reciprocal or directed edges between a pair of nodes, something typical in an **epistolary network**, where people are writing back and forth to each other.&#x20;
+* If there are more edges in a **directed** graph than in an **undirected** one, it suggests that some nodes are reciprocally connected, as is common in letter networks.
+* If a **multigraph** has even more edges, this means that **parallel edges** exist between the same pairs of nodes (for example, one person sending several letters to another).
+* If there are **no isolates** (nodes without any edges) and several **components**.
+* If you see a large number of **self-loops** (nodes connected to themselves), this is unusual in epistolarly collections and could indicate an issue with the data, for example, missing or misformatted recipient information.&#x20;
 
-You also notice that there are even more edges in a **multigraph** than in either of our non-multigraphs, which means the dataset includes **parallel edges** (i.e., duplicates in our edge table). Again, this is common for an epistolary network, where someone writes more than one letter to their friend.
+This module helps you decide what type of graph is appropriate for your dataset, and also alerts you to any potential data quality issues you may want to address.
 
-The preview shows **no isolates** (nodes without any edges) and several **components**. However, you see a large number of **self-loops**. This is unusual in epistolarly collections, as people are unlikely to write to themselves.&#x20;
+In this case, a **directed graph** makes sense, since letters are sent from one person to another.
 
-So, in addition to helping us decide what graph type is most useful for our dataset, this module helps us **review our data** by flagging potential errors or inconsistencies in our dataset that you may want to revisit later.
+## Review the assemble network graph module
 
-Having access to this overview means you can make more informed decisions about the next steps of our research or digital analysis, especially those that are sometimes automated for us.
+Next, you will use the `assemble.network_graph` module to actually build your graph.
 
-For our network, a **directed** graph makes the most sense.&#x20;
-
-Let's now look at what you need to build one with our `assemble.network_graph` module using `kiara.retrieve_operation_info`.
+Before you run it, it’s helpful to check its inputs:
 
 ```
 kiara.retrieve_operation_info('assemble.network_graph')
 ```
 
-## Graph decisions
+This is a flexible module that allows you to make several important decisions:
 
-This might seem like a chunky module, but it is doing a lot of important work up front. By making these decisions now, you will not have to make them later on when you move on to the more analytical parts.&#x20;
+* The **type of graph** you want to create (directed or undirected)
+* Whether the graph should be **weighted** or not
+* How to handle **parallel edges**
+* If you have a **node table**, you can include it — but this is optional
 
-If you change our mind later about the kind of graph you want to use, you can always come back and rerun this step. This is why the `preview.network_info` function is very useful. It allows us to make an informed decision about our network early on.
+If you later decide to change your mind about how to structure your graph, you can simply re-run this step.&#x20;
 
-You have already decided that you want to make a **directed** network, so you will select 'directed' for graph type. You created our edge table earlier and saved it as 'edges', so you can load that back in. You also need to specify our Source and Target columns again, and you can copy all this information from our preview module.&#x20;
+That’s why previewing the network first is so helpful — it gives you the information you need to make an informed decision.
 
-You do not have a node table for this dataset, but if you did, this would be the place to include it.
+## Assemble the network graph
 
-Now, you can make some more decisions. One of the most important is deciding whether our network is **weighted** or **unweighted.** This can mean different things depending on your data, such as the number of letters between correspondents, the distance between them, or the duration of their relationship. If all the relationships between nodes in your network are the same, you can set `is_weighted` to `False`.  But if not, you need to tell kiara where this weight information is coming from.
+Now that you have reviewed the structure of your data, you are ready to assemble the graph.
 
-If weights already exist in the edges table, for example, if you have already assigned weights to the network before uploading the data into kiara, then you can just select the weight column. In case your graph contains parallel edges, which you would already know exist from the `preview.network_info` , and you prefer not to use a multigraph, you can specify how to handle these weighted parallel edges. You can choose to aggregate the weights of the parallel edges by summing them `sum` . calculating their average weight `mean` , finding the highest value `maximum` , or the lowest `minimum`. Each of these choices will assign a single value as the new weight for that edge in the network.&#x20;
+For this dataset, you will create a **directed graph**.
 
-If you want kiara to calculate the weights for you, you can choose `sum` , which will count the total number of times each edge appears and use that as the weight. Keep in mind that if you have not provided any weights in the data, kiara will automatically assign a weight of 1 to each edge. In that case, selecting `mean` , `minimum`, or `maximum` will simply return 1 for every edge, making the result the same as an **unweighted** network.
+You will also choose to create a **weighted graph**, where the weight of each edge reflects the **number of letters** sent between two people.
 
-The inputs for this module encourage us to reflect on the decisions you are making as you go, and think about how our data fits into these kinds of measurements. By working through these steps in kiara, you are not only making choices but also **documenting** them. Kiara tracks these decisions, both through the way the process is stored and through the comments you can include along the way.
+If the dataset contains parallel edges (which the preview revealed), you can choose how to aggregate them. In this case, you will choose `'sum'` — which will count how many times each edge occurs.
 
-Since you are still working with our letter dataset, you will ask kiara to add all the edges together so that the weight will tell us how many letters each person wrote to each other.
+Keep in mind that if you have not provided any weights in the data, kiara will automatically assign a weight of 1 to each edge. In that case, selecting `mean` , `minimum`, or `maximum` will simply return 1 for every edge, making the result the same as an **unweighted** network.
+
+Here is the full set of inputs:
 
 ```
 inputs = {
@@ -547,11 +562,19 @@ CKCC = kiara.run_job('assemble.network_graph', inputs=inputs, comment="")
 CKCC
 ```
 
-Great, this has created a kiara **network graph object**. The output includes both an **edge table** and a **node table** for the network.
+Now you have created a kiara **network graph object**.&#x20;
 
-Since you did not provide a separate node table, kiara has automatically extracted the node information from the edges. If you look at the edge table now, you will see that it includes **weights**, calculated according to the decision you just made.&#x20;
+The output includes both an **edge table** and a **node table**. Since you did not provide a separate node table, kiara automatically extracted node information from the edges.
 
-As you saw earlier in the `preview.network_info` module, the network consists of eight separate components. You might want to focus on just the **main component**, which includes the most nodes. To do this, you can extract the largest component and return it as its own network graph.&#x20;
+If you look at the edge table now, you will see that it includes **weights**, calculated based on the number of letters exchanged.
+
+## Extract the largest component
+
+The preview you ran earlier showed that the network has eight **components** (disconnected subgraphs).&#x20;
+
+You may want to focus your analysis on the **largest component** — the one with the most nodes — since it often contains the most interesting or well-connected part of the network.
+
+You can extract the largest component like this:
 
 ```
 CKCC_largest_component = kiara.run_job('extract.largest_component', inputs={'network_graph':CKCC['network_graph']}, comment="")
@@ -559,13 +582,19 @@ CKCC_largest_component = kiara.run_job('extract.largest_component', inputs={'net
 CKCC_largest_component
 ```
 
+Now you have a new graph containing just the **largest component** of your network, ready for further analysis.
+
 ## Structural measures
 
-Now that you have extracted the largest component of the network, you can calculate some basic structural measures: the **average path length** and the **diameter** of the network.
+Now that you have extracted the largest component of your network, you can calculate some basic **structural measures**: the **diameter** and the **average path length**.
 
-These kinds of calculations only work on connected graphs (i.e., networks with only one component) or if you have extracted the largest component already.
+These calculations require the graph to be **connected**, which is why it’s important that you are working with the largest component.
 
-Let’s take a look at the **diameter**:
+## Calculate the diameter
+
+The **diameter** tells you the length of the longest shortest path between any two nodes in the network, in this case, 7 steps.
+
+Here is how you calculate it:
 
 ```
 
@@ -573,79 +602,89 @@ diameter = kiara.run_job('calculate.diameter', inputs={'network_component':CKCC_
 diameter
 ```
 
-And now for the **average path length**:
+## Calculate the average path length
+
+The **average path length** gives you the average number of steps it takes to get from one node to another, about 2.7 in this case.
+
+Here is how you calculate it:
 
 ```
 avg_path = kiara.run_job('calculate.average_path', inputs={'network_component':CKCC_largest_component['largest_component']}, comment='c')
 avg_path
 ```
 
-These two metrics give us an idea of the overall sturcture of the network:
-
-* The **diameter** tells us the longest shortest path between any two nodes in the network—in this case, 7 steps.
-* The **average path length** tells us, on average, how many steps it takes to get from one node to another—about 2.7 in this case.
+These two metrics give us an idea of the overall structure of the network.
 
 ## Statistical measures
 
-Now that you have created our graph, you can start doing some of the more analytical work. Let’s begin by exploring some common measurements that assess the value or importance of individual nodes within the network.
+Now that you have your network assembled, you can start exploring **centrality measures** — ways of assessing how important or influential each node is in the network.
 
-## Degree
+## Degree centrality
 
-You will begin with degree, using kiara's [`create.degree_rank_list`](#user-content-fn-1)[^1] module. This module allows us to calculate degree as both **undirected** and **weighted**. In this epistolary network, **undirected** **degree** counts the number of individual correspondents each person has, whereas **weighted** **degree** counts the total number of incoming and outgoing letters for each actor in the network.
+You will start by calculating **degree centrality** using kiara’s `calculate.degree_score` module.
 
-Let's use our `retrieve_operation_info` function to check what you need to calculate these degrees:
+Before running it, check what inputs the module requires:
 
 ```
 kiara.retrieve_operation_info('calculate.degree_score')
 ```
 
-Nice and simple. You just need to provide the network graph you created in `assemble.network_graph`.
-
-Let’s give it a go then:
+Now you can run the calculation:
 
 ```
 output = kiara.run_job('calculate.degree_score', inputs={'network_graph':CKCC['network_graph']}, comment="")
 output
 ```
 
-This function creates a table showing the undirected degree of each node. Since it automatically detects that the network is weighted (based on how it was created), it also calculates the weighted degree for each node. It has also assigned the two degree scores as node attributes in our network, which means you can keep these for further centrality measurements, allowing us to accumulate different scores rather than overwriting them each time.
+This will return a table of **degree scores**:
 
-## Betweeness
+* **Undirected degree**: number of correspondents
+* **Weighted degree**: number of letters sent and received
 
-Let's look at a different centrality measure now. You will use `retrieve_operation_info` again to see what you need to calculate **betweenness** for the nodes in our network:
+kiara also adds these degree scores as **node attributes**, so you can use them in later analyses.
+
+## Betweenness centrality
+
+Next, you will calculate **betweenness centrality**.
+
+Again, first check what inputs the module requires:
 
 ```
 kiara.retrieve_operation_info('calculate.betweenness_score')
 ```
 
-This module asks us to define how you want our weights to be interpreted – is the weight `'positive'`, indicating **strong relationships**, or is it `'negative'`, acting as a **distance** or **time needed** for these edges? Whilst this is often automated in network measures, kiara prompts us to think more carefully about our data and our network. This again allows us to trace the decisions you are making about your analysis.\
+This module asks you to define whether **weights** should be interpreted as **positive** (indicating strength) or **negative** (indicating distance or cost).
 
+This module asks us to define how you want our weights to be interpreted – is the weight `'positive'`, indicating **strong relationships**, or is it `'negative'`, acting as a **distance** or **time needed** for these edges? Whilst this is often automated in network measures, kiara prompts us to think more carefully about our data and our network. This again allows us to trace the decisions you are making about your analysis.
 
-As you are dealing with **epistolary data**, you will eave this input as `'True'`, as the weight indicates **strength**. At this stage, the module is also set to calculate both **unweighted** and **weighted betweenness** using the network as a **directed graph**. Though this is another **pre-made** decision for this notebook and the dataset in use, it's important to acknowledge this and be as transparent about these kinds of choices as the ones actively documented by user input.
+For the epistolary dataset, you will leave this input as `'True'` , as the weight indicates strength (number of letters).
 
-Let’s give it a go then. You want to use the network you just created using the degree ranking module, so let's save that and use it in our inputs:
+Before running the calculation, save the current network (with degree scores attached):
 
 ```
 network_graph = output['centrality_network']
-
-output = kiara.run_job('calculate.betweenness_score', inputs={'network_graph':network_graph}, comment="")
-
-output
 ```
 
-Just like the degree module, it has returned a table with the two **betweenness scores**, ranked by unweighted, and also assigned these as **node attributes** that you can carry forward into more measurements.
+Now calculate betweenness:
 
-Let’s look at one more centrality here in this notebook.
+<pre><code><strong>output = kiara.run_job('calculate.betweenness_score', inputs={'network_graph':network_graph}, comment="")
+</strong>
+output
+</code></pre>
 
-## Eigenvector
+As before, kiara will return a table of **betweenness scores**, and also add these scores to the **node attributes**.
 
-kiara also includes a module to measure **eigenvector centrality**, so let's look at what that needs:
+## Eigenvector centrality
+
+You can now calculate **eigenvector centrality**.
+
+First, check the module:
 
 ```
 kiara.retrieve_operation_info('calculate.eigenvector_score')
 ```
 
-This module is set up similarly to the betweenness measure, and again you can define how to interpret the weights. If you have a larger dataset, you can also adjust the number of iterations for the calculation. For now, you will leave the parameters as they are and use our updated network graph, which already has **degree** and **betweenness** scores attached.
+You will use your updated network again:
 
 ```
 network_graph = output['centrality_network']
@@ -655,21 +694,30 @@ output = kiara.run_job('calculate.eigenvector_score', inputs={'network_graph':ne
 output
 ```
 
-As before, you now have a **score table** and updated **node attributes** in the network graph — great!
+Once again, kiara will return a table of scores and update the node attributes.
 
-There is one final centrality measure available in the network analysis plugin: **closeness**. See if you can figure out how to check the information for this and run it on the network here, or feel free to move on to exploring other measures.
+## Closeness centrality
 
-## Modularity Group
+kiara also includes a module to calculate **closeness centrality**.
 
-This next module determines the **modularity groups** in the network, again assigning each group as a **node attribute**. Let’s have a look at the parameters for it:
+You can try this on your own:
+
+1. Use `retrieve_operation_info` to check the module.
+2. Run it on your current network.
+
+## Modularity Groups
+
+Next, you will calculate **modularity groups** — clusters of nodes that are more tightly connected to each other.
+
+First, check the module:
 
 ```
 kiara.retrieve_operation_info('compute.modularity_group')
 ```
 
-Here, you can either **set the number of communities** you want the module to divide the network into, or you can allow the code to find this automatically.
+You can either set the number of communities manually or let kiara detect them.
 
-Let’s give it a go with our network once more:
+Now run the module:
 
 ```
 network_graph = output['centrality_network']
@@ -679,25 +727,19 @@ output = kiara.run_job('compute.modularity_group', inputs={'network_graph':netwo
 output
 ```
 
-Great — this once again gives us our **updated network**, and also tells us how many **modularity groups** the measure has found in the network.
-
-Let's look at one last measure.
+kiara will update the node attributes with community group numbers.
 
 ## Cut points
 
-This last function finds all the **cut-points** in the network — these are nodes which, if removed, would split the component into two or more separate pieces. The function returns a **list of cut-points**, and also assigns each node a **'Yes'** or **'No'** as a node attribute to indicate whether it is a cut-point.
+Finally, you can identify **cut points** — nodes whose removal would break the network into separate parts.
 
-Let’s have a look one last time:
+First, check the module:
 
 ```
 kiara.retrieve_operation_info('create.cut_point_list')
 ```
 
-Nice and simple — no extra parameters needed: it just requires our network.
-
-It’s worth pointing out that the **cut-point** function in **NetworkX** does not work on **directed** or **multidirected** graphs. If you are using one of these graph types, this `create.cut_point_list` function will first convert the graph into an **undirected** version to perform the calculation, and then it will return the results in your original directed graph. This does not affect the metrics, but it’s good to know!
-
-Let’s run it on our network:
+Now run it:
 
 ```
 network_graph = output['modularity_network']
@@ -707,25 +749,35 @@ output = kiara.run_job('create.cut_point_list', inputs={'network_graph':network_
 output
 ```
 
-As with the previous modules, this gives us an updated **node table** with a new **Cut Point** column (`Yes` or `No`), and a **list** **of nodes** that are identified as cut-points.
+kiara will return:
 
-Having started simply with an imported CSV of letter edges, you have now got a lot of information. This is great — but what next?
+* A list of cut points
+* An updated node table with a `'Cut Point'` attribute (`Yes` or `No`)
+
+**Note:** The `cut_point_list` function in **NetworkX** (which kiara uses internally) does not support **directed** or **multi-directed** graphs. If you are working with one of these graph types, kiara will automatically convert your graph to an **undirected version** just for this calculation. The results are then returned in your original directed graph. This does not affect the correctness of the results — but it’s useful to be aware of this behind-the-scenes step.
 
 ## Export the network
 
-kiara has stored all of the information you have just created, and because it’s **interoperable**, it also allows us to **export** the network again.
+Now that your network is fully analyzed, you can export it for use in other tools (for visualization or further analysis).
 
-You can export this network data as a set of **CSVs**, or as one of several **network file formats** (such as **graphml** or **gexf**) using built-in kiara modules like this:
+Check the export module:&#x20;
 
 ```
 kiara.retrieve_operation_info('export.network_graph')
 ```
 
-From this, you can work with our kiara network object in other software — for example, to do **further analysis** or to create **visualisations**!
+You can export your network as:
 
-Give it a go yourself!
+* CSV
+* GraphML
+* GEXF
+* and other formats
 
-Finally, you can check out the **lineage** for our final `cut_network` output. This shows how **all of our decisions** were stored — and how they shaped the creation of our network — all the way from the original import step.
+Give it a try!
+
+## Check the lineage
+
+Finally, you can check the **lineage** of your entire network workflow — to see how every step was documented:
 
 ```
 lineage = kiara.retrieve_augmented_value_lineage(output['cut_network'])
@@ -733,25 +785,30 @@ from observable_jupyter import embed
 embed('@dharpa-project/kiara-data-lineage', cells=['displayViz', 'style'], inputs={'dataset':lineage})
 ```
 
-## Onboarding data: an alternative
+## Importing other data formats
 
-So far, you have created a network object in kiara by importing a **CSV** from a local path.
+So far, you have created a network from a **CSV**.&#x20;
 
-But what about other formats? Let’s pause quickly and look at how to import a **GML file** instead.
+But you can also import networks from formats like **GML**.
 
-Here you will use a different sample dataset, a [co-appearance network](http://www-personal.umich.edu/~mejn/netdata/) of characters in Victor Hugo's novel _Les Miserables_, which is already in GML format.
+You will now import a [co-appearance network](http://www-personal.umich.edu/~mejn/netdata/) of characters from Victor Hugo's novel, _Les Misérables_ (in GML format).
 
-Let’s take a look at the function `import.network_graph.from.file` and how it works:
+First, check the module:
 
 ```
 kiara.retrieve_operation_info('import.network_graph.from.file')
 ```
 
-For this, you only need the **path** to the file you want to use — there is no need to import it into kiara first, as this module takes care of everything in one step.
+For this module, you only need to provide:
 
-If the **node labels** in your GML file are named something other than `'id'`, you can specify that using the `label` input. If the **weight column** in your file has a different name (for example, in the _Les Misérables_ graph it is `'value'`), you can specify that too — kiara will then rename it to `'weight'` so that further metrics can use the weighted edges.
+* the path to the file
+* the file type (`'gml'`)
 
-Let’s try it:
+If the **node labels** in your GML file are named something other than `'id'`, you can specify that using the `label` input.&#x20;
+
+If the **weight column** in your file has a different name (for example, `'value'`), you can tell kiara to rename it to `'weight'`.
+
+Now import the GML file:
 
 ```
 lesmis_path = os.path.join(notebook_path,"data/lesmis.gml")
@@ -760,17 +817,15 @@ lesmis = kiara.run_job('import.network_graph.from.file', inputs={'path': lesmis_
 lesmis
 ```
 
-As you can see, this module **not only imports the GML file** into kiara, but also **automatically converts it** into a kiara network object for us — great!
+kiara imports the file and automatically converts it into a **network graph object**.&#x20;
 
-Notice that the **edge table** now uses the column name `'weight'`, which was automatically updated from `'value'` to match kiara’s expected format for edge weights.
+**Note**: The **edge table** now uses the column name `'weight'`, which was automatically updated from `'value'` to match kiara’s expected format for edge weights.
 
-This network can now be used in degree calculations, just like you did before:
+You can now run analyses just as you did before. For example:
 
 ```
 output = kiara.run_job('calculate.degree_score', inputs={'network_graph':lesmis['network_graph']}, comment="")
 output
 ```
 
-You will leave this _Les Misérables_ network here — but it’s useful to see this **alternative option** for importing data for networks. If you want to experiment with this dataset more, feel free to give it a try!
-
-[^1]: This should be replaced with calculate.degree\_score?
+This is a great way to work with published networks or networks from other tools — and you can use all the same kiara operations on them.
