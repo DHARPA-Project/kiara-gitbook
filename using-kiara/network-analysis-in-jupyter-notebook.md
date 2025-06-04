@@ -63,7 +63,13 @@ The first installation may take a few minutes. That is normal.
 To make kiara more useful, you will also install some basic **plugins** by running:&#x20;
 
 ```
-pip install kiara_plugin.core_types kiara_plugin.onboarding kiara_plugin.tabular pip install observable_jupyter
+pip install kiara_plugin.core_types kiara_plugin.onboarding kiara_plugin.tabular 
+```
+
+For the lineage visuals later, make sure to run:
+
+```
+pip install observable_jupyter
 ```
 
 These plugins provide support for:
@@ -71,6 +77,7 @@ These plugins provide support for:
 * core data types
 * helpful onboarding tools
 * tabular data (spreadsheets, CSVs, etc.)
+* linage visualization&#x20;
 
 To see which versions of kiara and its plugins are installed, you can run:
 
