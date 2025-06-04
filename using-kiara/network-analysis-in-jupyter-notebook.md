@@ -93,6 +93,14 @@ kiara_plugin.tabular      0.5.6
 pip install observable_jupyter
 ```
 
+## Start Jupyter Notebook
+
+To open the Jupyter interface, run:
+
+```
+jupyter notebook
+```
+
 ## Import kiara and create an API
 
 Now that kiara and its plugins are installed, let's set up `kiaraAPI`.
