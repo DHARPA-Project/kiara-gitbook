@@ -785,8 +785,6 @@ You can export your network as:
 * GEXF
 * and other formats
 
-Give it a try!
-
 ## Check the lineage
 
 Finally, you can check the **lineage** of your entire network workflow — to see how every step was documented:
