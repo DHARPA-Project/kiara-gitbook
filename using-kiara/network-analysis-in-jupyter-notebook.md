@@ -164,7 +164,7 @@ Each **operation** is a task you can perform in kiara, such as creating a table,
 
 ## Download a file&#x20;
 
-Now that kiara is set up, let's bring a file into our notebook using the `download.file` operation. &#x20;
+Now that kiara is set up, let's bring a file into your notebook using the `download.file` operation. &#x20;
 
 To understand what this operation does and what information it needs, run:
 
@@ -328,16 +328,16 @@ This returns a smaller table with only the Berlin-based general medicine journal
 
 ## Record and trace your data
 
-Now that you have transformed and queried our data, let's review what κiara knows about the outputs you have created and how it tracks changes. **Data lineage** is one of kiara’s most powerful features.&#x20;
+Now that you have transformed and queried your data, let's review what κiara knows about the outputs you have created and how it tracks changes. **Data lineage** is one of kiara’s most powerful features.&#x20;
 
-Let’s check the lineage of our query output:
+Let’s check the lineage of your query output:
 
 ```
 query_output = outputs['query_result']
 query_output
 ```
 
-Even though you have made changes along the way, you can still access a lot of information about our data.&#x20;
+Even though you have made changes along the way, you can still access a lot of information about your data.&#x20;
 
 kiara automatically traces all of these changes, **keeping track of** **inputs** and **outputs** and assigning each a unique identifier, so you always know exactly what has happened to your data.&#x20;
 
