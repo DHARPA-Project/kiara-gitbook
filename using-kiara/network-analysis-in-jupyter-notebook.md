@@ -446,7 +446,7 @@ CKCC = kiara.run_job('import.local.file', inputs={'path': csv_file_path}, commen
 
 ## Create a network
 
-Now that you have imported our data, it’s time to build a **network** from it.&#x20;
+Now that you have imported your data, it’s time to build a **network** from it.&#x20;
 
 To create a network, kiara expects your data to be in the form of an **edge table**. An edge table lists relationships between entities — in this case, between senders and recipients of letters. Later, you could also add a **node table** (a table listing all the individual entities), but this is optional — you will skip it for now.
 
@@ -654,8 +654,6 @@ kiara.retrieve_operation_info('calculate.betweenness_score')
 ```
 
 This module asks you to define whether **weights** should be interpreted as **positive** (indicating strength) or **negative** (indicating distance or cost).
-
-This module asks us to define how you want our weights to be interpreted – is the weight `'positive'`, indicating **strong relationships**, or is it `'negative'`, acting as a **distance** or **time needed** for these edges? Whilst this is often automated in network measures, kiara prompts us to think more carefully about our data and our network. This again allows us to trace the decisions you are making about your analysis.
 
 For the epistolary dataset, you will leave this input as `'True'` , as the weight indicates strength (number of letters).
 
