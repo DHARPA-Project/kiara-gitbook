@@ -1,42 +1,76 @@
 # Network analysis in jupyter notebook
 
-## Install kiara&#x20;
+Before you run any notebook, you will need to install kiara on your computer.&#x20;
 
-Before running any notebook, you need to install kiara on your computer using the **command-line interface (CLI)**. The following step will guide you through the process.
+This process is quite manageable, and I will walk you through it step by step.
 
-To begin, you must install **conda** or **miniconda**, which are tools for managing software environments and dependencies. We recommend installing **miniconda**, which is the lighter version of conda. You can find **installation instructions** for miniconda [here](https://docs.anaconda.com/miniconda/).&#x20;
+You will need:
 
-Be sure to download the right version for your operating system (Windows, macOS, or Linux).
+* a tool called **conda** or **miniconda** for managing Python and dependencies
+* a special **environment** where kiara will live
+* the **kiara** software itself, plus a few plugins
 
-## Set up a kiara environment
+## Install conda (or miniconda)
 
-We suggest creating a **separate environment** for kiara. This makes it easier to manage and avoid conflicts with other software. You can do this by opening your **CLI** and typing:
+**Conda** is a popular tool that helps you manage different versions of Python and software libraries. If you already have Conda (or Miniconda) installed, you can skip this step.
+
+If not:
+
+* Go to the Miniconda [download page](https://www.anaconda.com/docs/getting-started/miniconda/main).
+* Download the version that matches your computer (Windows, macOS, or Linux).
+* Follow the instructions to install it.
+
+\*Double-check that you choose the correct version for your operating system and architecture (most modern computers use the 64-bit version).
+
+## Create a kiara environment
+
+Once Conda is installed, open your **Terminal** (on Mac or Linux) or **Command Line Interface (CLI)** (on Windows).
+
+We are now going to create a special **environment** just for Kiara. This is like giving Kiara its own room, so that it will not interfere with other tools or projects on your computer.
+
+Type this command:
 
 ```
 conda create -n kiara_testing python jupyter
 ```
 
+This creates an environment called `kiara_testing` and installs a recent version of Python and **Jupyter Notebook** (the tool we’ll use to run the notebooks).
+
 You can replace `kiara_testing` with any name you like for your environment.
 
-Once the environment is created, activate it with:
+## Activate the envrionment
+
+Next, tell Conda that you want to activate this new environment:
 
 ```
 conda activate kiara_testing
 ```
 
-## Install packages
+## Install kiara
 
-Now that your environment is set up, you can begin installing the necessary packages. kiara is not available directly through **conda**, so we’ll use `pip`, another common package manager:
+Now that your environment is set up, let's install **kiara** iteself.&#x20;
+
+kiara is installed using a package-management system for Python called `pip`. Just type:
 
 ```
 pip install kiara
 ```
 
-The first installation may take a few minutes. Once kiara is installed, we will also add some **essential plugins** by running:&#x20;
+The first installation may take a few minutes. That is normal.
+
+## Install kiara plugins
+
+To make kiara more useful, we will also install some basic **plugins** by running:&#x20;
 
 ```
-pip install kiara_plugin.core_types kiara_plugin.onboarding kiara_plugin.tabular
+pip install kiara_plugin.core_types kiara_plugin.onboarding kiara_plugin.tabular pip install observable_jupyter
 ```
+
+These plugins provide support for:
+
+* core data types
+* helpful onboarding tools
+* tabular data (spreadsheets, CSVs, etc.)
 
 To see which versions of kiara and its plugins are installed, you can run:
 
@@ -53,49 +87,11 @@ kiara_plugin.onboarding   0.5.2
 kiara_plugin.tabular      0.5.6
 ```
 
-As we will see in the next section, depending on which notebooks you wish to run, you may also need to install the plugins for **topic modelling** and **network analysis**.
+## Import kiara and create an API
 
-## Install kiara's plugins
+Now that kiara and its plugins are installed, let's set up `kiaraAPI`.
 
-Before we get started with **network analysis**, we need to check whether kiara and its associated **plugins** are installed. kiara's features are available through plugins.&#x20;
-
-There are seven plugins:&#x20;
-
-* `kiara_plugin.core-types`
-* `kiara_plugin.onboarding`
-* `kiara_plugin.tabular`
-* `kiara_plugin.network_analysis`
-* `kiara_plugin.language_processing`
-* `kiara_plugin.html`
-* `kiara_plugin.streamlit`
-
-To install these, first launch **Jupyter** from the command line by running:
-
-```
-jupyter notebook
-```
-
-This will open the Jupyter notebook in your default web browser.&#x20;
-
-In a **notebook cell**, run the following code:
-
-```
-try:
-    from kiara_plugin.jupyter import ensure_kiara_plugins
-except:
-    import sys
-    print("Installing 'kiara_plugin.jupyter'...")
-    !{sys.executable} -m pip install -q kiara_plugin.jupyter
-    from kiara_plugin.jupyter import ensure_kiara_plugins
-
-ensure_kiara_plugins()
-```
-
-## Set up kiara
-
-Now that the plugins are ready, let's set up kiara itself.
-
-To start using kiara in **Jupyter**, you need to create an **instance** of the `kiaraAPI`. This API provides access to kiara's **functions**, enabling you to interact with and control your **data workflows**.
+To start using kiara in Jupyter Notebook, you first need to create a `kiaraAPI` **instance**. This instance allows us to control kiara and see what operations are available.&#x20;
 
 To set this up, run the following code in a notebook cell:
 
@@ -105,11 +101,17 @@ from kiara.api import KiaraAPI
 kiara = KiaraAPI.instance()
 ```
 
-## Create a project
+## Create a project context
 
-In kiara, a **context** is your project space. It keeps track of your data, the tasks you run, and the steps you take. A **default contex**t is always available, but you can also create your own for specific projects.&#x20;
+In kiara, a **context** is your project space. It stores:
 
-To create and use a new context called `hello_kiara` , run the following code:
+* the data you import or create
+* the operations you run
+* your notes and decisions
+
+A default context is always available, but you can also create your own for specific projects.&#x20;
+
+To create and use a **new context** called `hello_kiara` , run the following code:
 
 ```
 kiara.set_active_context(context_name='hello_kiara', create=True)
@@ -129,6 +131,8 @@ Current Context: hello_kiara
 
 This confirms that your new context is set up and ready to use.&#x20;
 
+## Explore kiara operations
+
 Now, we can explore the tools kiara offers. To view a list of all available **operations** (based on the installed plugins), run:&#x20;
 
 ```
@@ -138,7 +142,22 @@ kiara.list_operation_ids()
 This will return a list of operations, like:
 
 ```
-['create.table.from.file', 'calculate.degree_score', 'export.table.as.csv_file', ...]
+['assemble.network_graph',
+ 'assemble.tables',
+ 'calculate.betweenness_score',
+ 'calculate.closeness_score',
+ 'calculate.degree_score',
+ 'calculate.eigenvector_score',
+ 'compute.modularity_group',
+ 'create.cut_point_list',
+ 'create.database.from.file',
+ 'create.database.from.file_bundle',
+ 'create.database.from.table',
+ 'create.database.from.tables',
+ 'create.job_log',
+ 'create.network_graph.from.file',
+ 'create.table.from.file'
+ ...]
 ```
 
 Each **operation** is a task you can perform in kiara, such as creating a table, calculating network metrics, or exporting files.&#x20;
@@ -153,12 +172,12 @@ To understand what this operation does and what information it needs, run:
 kiara.retrieve_operation_info('download.file')
 ```
 
-We’ll now download a sample **CSV file** using this operation. First, we define the **input** (the file **URL** and **name**) and then run the job:
+We will now download a sample CSV file using this operation. First, we define the **input** (the file URL and name) and then run the job:
 
 ```
 inputs = {
-    "url": "https://raw.githubusercontent.com/DHARPA-Project/kiara.examples/main/examples/data/network_analysis/journals/JournalNodes1902.csv",
-    "file_name": "JournalNodes1902.csv"
+        "url": "https://raw.githubusercontent.com/DHARPA-Project/kiara.examples/main/examples/data/network_analysis/journals/JournalNodes1902.csv",
+        "file_name": "JournalNodes1902.csv"
 }
 
 outputs = kiara.run_job('download.file', inputs=inputs, comment="importing journal nodes")
@@ -172,6 +191,8 @@ outputs
 
 You will see a preview of the file's content. This shows the journal data was successfully downloaded.&#x20;
 
+## Save the downloaded file
+
 To keep using this file later (even if the notebook is closed), we will save it inside kiara using an **alias**. This works like giving a name that kiara remembers.&#x20;
 
 ```
@@ -179,7 +200,7 @@ downloaded_file = outputs['file']
 kiara.store_value(value=downloaded_file.value_id, alias='Journal_Nodes')
 ```
 
-Now, `Journal_Nodes` is saved in kiara's internal storage. You can refer to it later just by its alias, just like using a variable in Python.&#x20;
+Now, `Journal_Nodes` is saved in kiara's internal storage. You can refer to it later just by its alias.
 
 ## Convert the file into a table
 
@@ -199,10 +220,11 @@ To see what inputs and outputs this operation expects, run:
 
 ```
 op_id = 'create.table.from.file'
+
 kiara.retrieve_operation_info(op_id)
 ```
 
-From this, we learn:
+From this, we learn the inputs and outputs:
 
 **Inputs**
 
@@ -230,16 +252,19 @@ outputs
 
 This will process the CSV file and show the result as a **table** with **columns** and **rows**.
 
-To make it easier to reuse the table later, we can save it in kiara under a **new** **alias**:
+## Save the table
+
+To make it easier to reuse the table later, we can save it in kiara under a **new alias**:
 
 ```
 outputs_table = outputs['table']
+
 kiara.store_value(value=outputs_table.value_id, alias="Journal_Nodes_table")
 ```
 
 Now, your data is saved inside kiara and can be accessed at any time using the name `Journal_Nodes_table`.
 
-## Query your data
+## Query the data
 
 Now that we have downloaded the file and converted it into a table, we can start exploring the data. One simple way to do that is by running **SQL queries** directly on the table using κiara.
 
@@ -263,7 +288,7 @@ kiara.retrieve_operation_info('query.table')
 
 This tells us that `query.table` allows us to write an **SQL query** to explore the data.&#x20;
 
-The required inputs are:
+The required **inputs** are:
 
 * `table`: the data you want to query
 * `query`: your SQL statement
@@ -283,6 +308,8 @@ outputs
 
 The result (in `outputs['query_result']`) is a filtered table showing only journals published in Berlin.
 
+## Refine the query
+
 Let's narrow this further and find all the journals that are about general medicine and published in Berlin.
 
 We can re-use the `query.table` function and the table we've just made, stored in `outputs['query_result']`
@@ -301,7 +328,9 @@ This returns a smaller table with only the Berlin-based general medicine journal
 
 ## Record and trace your data
 
-Now that we’ve transformed and queried our data, let's review what κiara knows about the outputs we've created and how it **tracks changes**.
+Now that you have transformed and queried our data, let's review what κiara knows about the outputs you have created and how it tracks changes. **Data lineage** is one of kiara’s most powerful features.&#x20;
+
+Let’s check the lineage of our query output:
 
 ```
 query_output = outputs['query_result']
@@ -310,29 +339,41 @@ query_output
 
 Even though we have made changes along the way, we can still access a lot of information about our data.&#x20;
 
-Specifically, the operation gave us:
+kiara automatically traces all of these changes, **keeping track of** **inputs** and **outputs** and assigning each a unique identifier, so you always know exactly what has happened to your data.&#x20;
 
-* A **unique value ID**
-* The **data type** (in this case, a `table`)
-* **When** the value was created
-* A **record of the job** that generated it
-* Links to the **inputs** and **outputs** of previous steps
-
-kiara automatically **traces** all of these changes, keeping track of **inputs** and **outputs** and assigning each a unique identifier, so you always know exactly what has happened to your data.&#x20;
-
-To see a **'backstage' view** of how your data was transformed, including the inputs for each function we have run and how they connect, run the following:
+To have a 'backstage' view of how your data was transformed, including the inputs for each function we have run and how they connect, run the following:
 
 ```
 query_output.lineage
 ```
 
-This shows a **chain of operations**:
-
-* The SQL query you ran (`query.table`)
-* The table that was queried (from `create.table`)
-* The original file that was downloaded (`download.file`)
-
 Each input is assigned a unique ID, allowing complete transparency and traceability.
+
+You can also **visualize** the lineage by running:
+
+```
+lineage = kiara.retrieve_augmented_value_lineage(query_output)
+from observable_jupyter import embed
+embed('@dharpa-project/kiara-data-lineage', cells=['displayViz', 'style'], inputs={'dataset':lineage})
+```
+
+## Review and export all jobs
+
+kiara keeps a **record** of all operations you’ve run in this context.
+
+You can print out this history:
+
+```
+kiara.print_all_jobs_info_data(show_inputs=True, show_outputs=True, max_char=100)
+```
+
+Finally, you can **export** your job log to a CSV file to keep a full record of what you’ve done:
+
+```
+import pandas as pd
+job_table = pd.DataFrame(kiara.get_all_jobs_info_data(add_inputs_preview=True, add_outputs_preview=True))
+job_table.to_csv('job_log.csv', index=False)
+```
 
 ## Network analysis with kiara
 
