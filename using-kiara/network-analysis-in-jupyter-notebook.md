@@ -26,7 +26,7 @@ If not:
 
 Once Conda is installed, open your **Terminal** (on Mac or Linux) or **Command Line Interface (CLI)** (on Windows).
 
-You are now going to create a special **environment** just for Kiara. This is like giving Kiara its own room, so that it will not interfere with other tools or projects on your computer.
+You are now going to create a special **environment** just for kiara. This is like giving kiara its own room, so that it will not interfere with other tools or projects on your computer.
 
 Type this command:
 
