@@ -89,7 +89,7 @@ kiara_plugin.tabular      0.5.6
 
 ## Install the topic modeling package
 
-To install the topic modeling package, run:
+To install the **topic modeling package**, run:
 
 ```
 pip install git+https://github.com/DHARPA-Project/kiara_plugin.topic_modelling
