@@ -86,3 +86,39 @@ kiara_plugin.core_types   0.5.2
 kiara_plugin.onboarding   0.5.2
 kiara_plugin.tabular      0.5.6
 ```
+
+## Install the topic modeling package
+
+To install the topic modeling package, run:
+
+```
+pip install git+https://github.com/DHARPA-Project/kiara_plugin.topic_modelling
+```
+
+Alternatively, you can run:&#x20;
+
+```
+! pip install git+https://github.com/DHARPA-Project/kiara_plugin.topic_modelling
+```
+
+## Start Jupyter notebook
+
+To open the Jupyter interface, run:
+
+```
+jupyter notebook
+```
+
+## Import kiara and create an API
+
+Now that kiara and its plugins are installed, let's set up `kiaraAPI`.
+
+To start using kiara in Jupyter Notebook, you first need to create a `kiaraAPI` **instance**. This instance allows us to control kiara and see what operations are available.&#x20;
+
+To set this up, run the following code in a notebook cell:
+
+```
+from kiara.api import KiaraAPI
+
+kiara = KiaraAPI.instance()
+```
