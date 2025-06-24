@@ -140,12 +140,9 @@ create_table_from_zenodo_inputs = {
     "doi": "4596345",
     "file_name": "ChroniclItaly_3.0_original.zip"
 }
-create_table_from_zenodo_results = kiara.run_job(
-    'topic_modelling.create_table_from_zenodo',
-    inputs=create_table_from_zenodo_inputs,
-    comment=" "
-)
+create_table_from_zenodo_results = kiara.run_job('topic_modelling.create_table_from_zenodo', inputs=create_table_from_zenodo_inputs, comment= " ")
 corpus_table_zenodo = create_table_from_zenodo_results['corpus_table']
+create_table_from_zenodo_results
 ```
 
 The resulting table contains the name of each file and its corresponding text content, ready for further processing.
@@ -163,13 +160,8 @@ create_table_from_github_files_inputs = {
     "download_github_files__sub_path": "kiara.examples-main/examples/workshops/dh_benelux_2023/data",
     "download_github_files__include_files": ["txt"]
 }
-create_table_from_github_files_results = kiara.run_job(
-    'create.table_from_github_files',
-    inputs=create_table_from_github_files_inputs,
-    comment=" "
-)
-dl_file_bundle_gh = create_table_from_github_files_results['download_github_files__file_bundle']
-
+create_table_from_github_files_results = kiara.run_job('create.table_from_github_files', inputs=create_table_from_github_files_inputs, comment=" ")
+create_table_from_github_files_results
 ```
 
 This method creates a kiara table from the selected `.txt` files, alongside a downloadable file bundle for inspection or archival.
@@ -184,12 +176,8 @@ Run the following:
 import_table_from_local_folder_inputs = {
     "path": "/Users/mariella.decrouychan/Documents/GitHub/kiara_plugin.topic_modelling/tests/resources/data/text_corpus/data"
 }
-import_table_from_local_folder_results = kiara.run_job(
-    'import.table.from.local_folder_path',
-    inputs=import_table_from_local_folder_inputs,
-    comment=" "
-)
-
+import_table_from_local_folder_results = kiara.run_job('import.table.from.local_folder_path', inputs=import_table_from_local_folder_inputs, comment=" ")
+import_table_from_local_folder_results
 ```
 
 Make sure to replace the `path` with the actual location of your text corpus. The resulting table contains metadata and full content for each text file.
@@ -204,19 +192,41 @@ To begin, we extract metadata such as publication identifiers and dates directly
 
 Run the following operation to extract the metadata and append it to your corpus table:
 
-`lccn_metadata_inputs = {`\
-`"corpus_table": import_table_from_local_folder_results['table'],`\
-`"column_name": "file_name",`\
-`"map": [["sn84037024", "sn84037025"], ["La Ragione", "La Rassegna"]]`\
-`}`
-
-\
-`lccn_metadata_results = kiara.run_job(`\
-`'topic_modelling.lccn_metadata',`\
-`inputs=lccn_metadata_inputs,`\
-`comment = " "`\
-`)`
+```
+lccn_metadata_inputs = {
+    "corpus_table": import_table_from_local_folder_results['table'],
+    "column_name": "file_name",
+    "map": [["sn84037024","sn84037025"],["La Ragione","La Rassegna"]]   
+}
+lccn_metadata_results = kiara.run_job('topic_modelling.lccn_metadata', inputs=lccn_metadata_inputs, comment = " ")
+lccn_metadata_results
+```
 
 This will add three new columns to your table: `date`, `publication_reference`, and `publication_name`, based on patterns identified in the file names.
 
-### 2.2
+### 2.2 Visualize corpus distribution
+
+To understand how your documents are distributed over time and by publication, you can group the corpus by time periods with the `topic_modelling.corpus_distribution` operation.&#x20;
+
+Run the following to compute the distribution:
+
+```
+corpus_dist_inputs = {
+    "corpus_table": lccn_metadata_results["corpus_table"],
+    "periodicity": "month",
+    "date_col": "date",
+    "publication_ref_col": "publication_name",
+}
+corpus_dist_results = kiara.run_job('topic_modelling.corpus_distribution', inputs=corpus_dist_inputs, comment = " ")
+corpus_dist_results['dist_table'].data
+```
+
+This operation returns a table (`dist_table`) and a list (`dist_list`) summarizing how many texts exist per publication and time.&#x20;
+
+You can visualize the results using Observable notebooks:
+
+```
+from observable_jupyter import embed
+embed('@dharpa-project/timestamped-corpus', cells=['viewof chart', 'style'], inputs={"data":corpus_dist_results['dist_list'].data.list_data,"scaleType":'height', "timeSelected":'month'})
+```
+
