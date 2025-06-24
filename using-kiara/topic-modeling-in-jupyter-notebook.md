@@ -129,7 +129,7 @@ Before running topic modeling, you must first onboard your corpus. Kiara offers 
 
 Choose **one** of the following options:
 
-## 1.1 Onboard texts from Zenodo
+### 1.1 Onboard texts from Zenodo
 
 Use this method if your text files are archived on [Zenodo](https://zenodo.org/). The operation `topic_modelling.create_table_from_zenodo` retrieves a ZIP archive from Zenodo using its DOI and extracts its contents into a table with two columns: `file_name` and `content`.
 
@@ -150,7 +150,7 @@ corpus_table_zenodo = create_table_from_zenodo_results['corpus_table']
 
 The resulting table contains the name of each file and its corresponding text content, ready for further processing.
 
-## 1.2 Onboard texts from GitHub
+### 1.2 Onboard texts from GitHub
 
 If your files are hosted in a public GitHub repository, you can use the operation `create.table_from_github_files` to download and structure the data. Provide the repository owner, name, and path to the folder containing your text files.
 
@@ -174,7 +174,7 @@ dl_file_bundle_gh = create_table_from_github_files_results['download_github_file
 
 This method creates a kiara table from the selected `.txt` files, alongside a downloadable file bundle for inspection or archival.
 
-## 1.3 Onboard texts from a local folder
+### 1.3 Onboard texts from a local folder
 
 To use text files stored locally on your machine, run the operation `import.table.from.local_folder_path`. This imports all text files from a specified directory and creates a table similar to the above options.
 
@@ -198,7 +198,7 @@ Make sure to replace the `path` with the actual location of your text corpus. Th
 
 After onboarding your corpus, the next step is to enrich it with metadata, explore its temporal distribution, and optionally filter it to create a more focused subset for analysis.
 
-## 2.1 Extract metadata from filenames
+### 2.1 Extract metadata from filenames
 
 To begin, we extract metadata such as publication identifiers and dates directly from the file names with the `topic_modelling.lccn_metadata` operation. This helps structure the dataset for further filtering and analysis.
 
