@@ -129,13 +129,13 @@ from kiara.api import KiaraAPI
 kiara = KiaraAPI.instance()
 ```
 
-## 1. Data onboarding
+## Data onboarding
 
-Before running topic modeling, you must first onboard your corpus. Kiara offers three options for loading textual data, depending on where your files are stored. The 1.3 option uses example data present in the topic modelling plugin.&#x20;
+Before running topic modeling, you must first onboard your corpus. Kiara offers three options for loading textual data, depending on where your files are stored. The third option uses example data present in the topic modelling plugin.&#x20;
 
 Choose **one** of the following options:
 
-### 1.1 Onboard texts from Zenodo
+### Option 1: Onboard texts from Zenodo
 
 Use this method if your text files are archived on [Zenodo](https://zenodo.org/). The operation `topic_modelling.create_table_from_zenodo` retrieves a ZIP archive from Zenodo using its DOI and extracts its contents into a table with two columns: `file_name` and `content`.
 
@@ -153,7 +153,7 @@ create_table_from_zenodo_results
 
 The resulting table contains the name of each file and its corresponding text content, ready for further processing.
 
-### 1.2 Onboard texts from GitHub
+### Option 2: Onboard texts from GitHub
 
 If your files are hosted in a public GitHub repository, you can use the operation `create.table_from_github_files` to download and structure the data. Provide the repository owner, name, and path to the folder containing your text files.
 
@@ -172,7 +172,7 @@ create_table_from_github_files_results
 
 This method creates a kiara table from the selected `.txt` files, alongside a downloadable file bundle for inspection or archival.
 
-### 1.3 Onboard texts from a local folder
+### Option 3: Onboard texts from a local folder
 
 To use text files stored locally on your machine, run the operation `import.table.from.local_folder_path`. This imports all text files from a specified directory and creates a table similar to the above options.
 
@@ -188,11 +188,11 @@ import_table_from_local_folder_results
 
 Make sure to replace the `path` with the actual location of your text corpus. The resulting table contains metadata and full content for each text file.
 
-## 2. Subset creation
+## Subset creation
 
 After onboarding your corpus, the next step is to enrich it with metadata, explore its temporal distribution, and optionally filter it to create a more focused subset for analysis.
 
-### 2.1 Extract metadata from filenames
+### Extract metadata from filenames
 
 To begin, we extract metadata such as publication identifiers and dates directly from the file names with the `topic_modelling.lccn_metadata` operation. This helps structure the dataset for further filtering and analysis.
 
@@ -210,7 +210,7 @@ lccn_metadata_results
 
 This will add three new columns to your table: `date`, `publication_reference`, and `publication_name`, based on patterns identified in the file names.
 
-### 2.2 Visualize corpus distribution
+### Visualize corpus distribution
 
 To understand how your documents are distributed over time and by publication, you can group the corpus by time periods with the `topic_modelling.corpus_distribution` operation.&#x20;
 
@@ -236,7 +236,7 @@ from observable_jupyter import embed
 embed('@dharpa-project/timestamped-corpus', cells=['viewof chart', 'style'], inputs={"data":corpus_dist_results['dist_list'].data.list_data,"scaleType":'height', "timeSelected":'month'})
 ```
 
-### 2.3 Create a subset of the corpus
+### Create a subset of the corpus
 
 Once you’ve explored the distribution, you can run the `query.table` operation to filter the corpus based on specific criteria (e.g., a time range) using SQL queries.
 
@@ -258,13 +258,59 @@ subset
 
 This filtered table (`query_result`) can now be used as input for subsequent topic modeling steps.
 
-## 3. Tokenize corpus
+## Tokenize corpus
 
 With your subset ready, the next step is to convert each document into a list of tokens (words or characters), which will be the basis for topic modeling. This section walks through the process of extracting text content from the corpus, tokenizing it, and applying basic preprocessing steps.
 
-### 3.1 Extract text content as an array
+### Extract text content as an array
 
 To prepare the corpus for tokenization, you first need to extract the column that contains the text content and convert it into an array.&#x20;
 
 Run the operation `table.pick.column` to extract the `content` column from the table:
+
+```
+pick_column_inputs = {
+    "table": import_table_from_local_folder_results['table'],
+    "column_name": "content"   
+}
+pick_column_results = kiara.run_job('table.pick.column', inputs=pick_column_inputs, comment = " ")
+```
+
+This returns the text contents as an array, which can now be tokenized.
+
+### Tokenize the text
+
+Next, tokenize the array using the operation `topic_modelling.tokenize_array`. By default, tokenization is done by word (not by character).
+
+Run the following:
+
+```
+tokenize_array_inputs = {
+    "corpus_array": pick_column_results['array'],
+    "column_name": "content"   
+}
+tokenize_array_results = kiara.run_job('topic_modelling.tokenize_array', inputs=tokenize_array_inputs, comment= " ") 
+tokenize_array_results
+```
+
+This operation returns an array where each entry corresponds to a list of tokens (words) extracted from the respective document.
+
+### Preprocess the tokens
+
+To clean and standardize the tokens, use the operation `topic_modelling.preprocess_tokens`. This step is optional but recommended, especially for removing punctuation, digits, and very short tokens.
+
+Run the following to lowercase all tokens, keep only alphabetic tokens, and filter out those shorter than three characters:
+
+```
+preprocess_tokens_inputs = {
+    "tokens_array": tokenize_array_results['tokens_array'],
+    "lowercase": True,
+    "isalpha": True,
+    "min_length": 3,  
+}
+preprocess_tokens_results = kiara.run_job('topic_modelling.preprocess_tokens', inputs=preprocess_tokens_inputs, comment= " ")
+preprocess_tokens_results
+```
+
+This will return a cleaned array of token lists, ready to be used for training the topic model.
 
