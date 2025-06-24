@@ -150,7 +150,7 @@ corpus_table_zenodo = create_table_from_zenodo_results['corpus_table']
 
 The resulting table contains the name of each file and its corresponding text content, ready for further processing.
 
-## Option 2: Onboard texts from GitHub
+## 1.2 Onboard texts from GitHub
 
 If your files are hosted in a public GitHub repository, you can use the operation `create.table_from_github_files` to download and structure the data. Provide the repository owner, name, and path to the folder containing your text files.
 
@@ -174,7 +174,7 @@ dl_file_bundle_gh = create_table_from_github_files_results['download_github_file
 
 This method creates a kiara table from the selected `.txt` files, alongside a downloadable file bundle for inspection or archival.
 
-## Option 3: Onboard texts from a local folder
+## 1.3 Onboard texts from a local folder
 
 To use text files stored locally on your machine, run the operation `import.table.from.local_folder_path`. This imports all text files from a specified directory and creates a table similar to the above options.
 
@@ -219,3 +219,4 @@ Run the following operation to extract the metadata and append it to your corpus
 
 This will add three new columns to your table: `date`, `publication_reference`, and `publication_name`, based on patterns identified in the file names.
 
+### 2.2
