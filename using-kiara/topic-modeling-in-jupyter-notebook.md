@@ -101,6 +101,12 @@ Alternatively, you can run:&#x20;
 ! pip install git+https://github.com/DHARPA-Project/kiara_plugin.topic_modelling
 ```
 
+**Note**: For visualization operations, also install:
+
+```
+pip install observable_jupyter
+```
+
 ## Start Jupyter notebook
 
 To open the Jupyter interface, run:
@@ -223,10 +229,42 @@ corpus_dist_results['dist_table'].data
 
 This operation returns a table (`dist_table`) and a list (`dist_list`) summarizing how many texts exist per publication and time.&#x20;
 
-You can visualize the results using Observable notebooks:
+You can visualize the results using observable notebooks:
 
 ```
 from observable_jupyter import embed
 embed('@dharpa-project/timestamped-corpus', cells=['viewof chart', 'style'], inputs={"data":corpus_dist_results['dist_list'].data.list_data,"scaleType":'height', "timeSelected":'month'})
 ```
+
+### 2.3 Create a subset of the corpus
+
+Once you’ve explored the distribution, you can run the `query.table` operation to filter the corpus based on specific criteria (e.g., a time range) using SQL queries.
+
+To create a subset of documents published in 1917, run the following:
+
+```
+date_ref_1 = "1917-1-1"
+date_ref_2 = "1917-12-31"
+query = f"SELECT * FROM corpus_table WHERE CAST(date AS DATE) <= DATE '{date_ref_2}' AND CAST(date AS DATE) > DATE '{date_ref_1}'"
+inputs = {
+    'query' : query,
+    'table': lccn_metadata_results['corpus_table'],
+    'relation_name': "corpus_table"
+}
+
+subset = kiara.run_job('query.table', inputs=inputs, comment = " ")
+subset
+```
+
+This filtered table (`query_result`) can now be used as input for subsequent topic modeling steps.
+
+## 3. Tokenize corpus
+
+With your subset ready, the next step is to convert each document into a list of tokens (words or characters), which will be the basis for topic modeling. This section walks through the process of extracting text content from the corpus, tokenizing it, and applying basic preprocessing steps.
+
+### 3.1 Extract text content as an array
+
+To prepare the corpus for tokenization, you first need to extract the column that contains the text content and convert it into an array.&#x20;
+
+Run the operation `table.pick.column` to extract the `content` column from the table:
 
