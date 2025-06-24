@@ -122,3 +122,100 @@ from kiara.api import KiaraAPI
 
 kiara = KiaraAPI.instance()
 ```
+
+## 1. Data onboarding
+
+Before running topic modeling, you must first onboard your corpus. Kiara offers three options for loading textual data, depending on where your files are stored. The 1.3 option uses example data present in the topic modelling plugin.&#x20;
+
+Choose **one** of the following options:
+
+## 1.1 Onboard texts from Zenodo
+
+Use this method if your text files are archived on [Zenodo](https://zenodo.org/). The operation `topic_modelling.create_table_from_zenodo` retrieves a ZIP archive from Zenodo using its DOI and extracts its contents into a table with two columns: `file_name` and `content`.
+
+Run the following:
+
+```
+create_table_from_zenodo_inputs = {
+    "doi": "4596345",
+    "file_name": "ChroniclItaly_3.0_original.zip"
+}
+create_table_from_zenodo_results = kiara.run_job(
+    'topic_modelling.create_table_from_zenodo',
+    inputs=create_table_from_zenodo_inputs,
+    comment=" "
+)
+corpus_table_zenodo = create_table_from_zenodo_results['corpus_table']
+```
+
+The resulting table contains the name of each file and its corresponding text content, ready for further processing.
+
+## Option 2: Onboard texts from GitHub
+
+If your files are hosted in a public GitHub repository, you can use the operation `create.table_from_github_files` to download and structure the data. Provide the repository owner, name, and path to the folder containing your text files.
+
+Run the following:
+
+```
+create_table_from_github_files_inputs = {
+    "download_github_files__user": "DHARPA-Project",
+    "download_github_files__repo": "kiara.examples",
+    "download_github_files__sub_path": "kiara.examples-main/examples/workshops/dh_benelux_2023/data",
+    "download_github_files__include_files": ["txt"]
+}
+create_table_from_github_files_results = kiara.run_job(
+    'create.table_from_github_files',
+    inputs=create_table_from_github_files_inputs,
+    comment=" "
+)
+dl_file_bundle_gh = create_table_from_github_files_results['download_github_files__file_bundle']
+
+```
+
+This method creates a kiara table from the selected `.txt` files, alongside a downloadable file bundle for inspection or archival.
+
+## Option 3: Onboard texts from a local folder
+
+To use text files stored locally on your machine, run the operation `import.table.from.local_folder_path`. This imports all text files from a specified directory and creates a table similar to the above options.
+
+Run the following:
+
+```
+import_table_from_local_folder_inputs = {
+    "path": "/Users/mariella.decrouychan/Documents/GitHub/kiara_plugin.topic_modelling/tests/resources/data/text_corpus/data"
+}
+import_table_from_local_folder_results = kiara.run_job(
+    'import.table.from.local_folder_path',
+    inputs=import_table_from_local_folder_inputs,
+    comment=" "
+)
+
+```
+
+Make sure to replace the `path` with the actual location of your text corpus. The resulting table contains metadata and full content for each text file.
+
+## 2. Subset creation
+
+After onboarding your corpus, the next step is to enrich it with metadata, explore its temporal distribution, and optionally filter it to create a more focused subset for analysis.
+
+## 2.1 Extract metadata from filenames
+
+To begin, we extract metadata such as publication identifiers and dates directly from the file names with the `topic_modelling.lccn_metadata` operation. This helps structure the dataset for further filtering and analysis.
+
+Run the following operation to extract the metadata and append it to your corpus table:
+
+`lccn_metadata_inputs = {`\
+`"corpus_table": import_table_from_local_folder_results['table'],`\
+`"column_name": "file_name",`\
+`"map": [["sn84037024", "sn84037025"], ["La Ragione", "La Rassegna"]]`\
+`}`
+
+\
+`lccn_metadata_results = kiara.run_job(`\
+`'topic_modelling.lccn_metadata',`\
+`inputs=lccn_metadata_inputs,`\
+`comment = " "`\
+`)`
+
+This will add three new columns to your table: `date`, `publication_reference`, and `publication_name`, based on patterns identified in the file names.
+
