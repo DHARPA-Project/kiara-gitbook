@@ -314,3 +314,144 @@ preprocess_tokens_results
 
 This will return a cleaned array of token lists, ready to be used for training the topic model.
 
+## Remove stopwords
+
+Stopwords are common words (such as _and_, _the_, etc.) that usually carry little semantic weight in topic modeling. Removing them helps the model focus on the more meaningful vocabulary of your corpus.
+
+### Create a stopwords list
+
+To begin, you can generate a list of stopwords using the operation `topic_modelling.stopwords_list`. This operation allows you to combine standard stopword lists from the Natural Language Toolkit (NLTK) with any custom stopwords relevant to your project.
+
+Run the following to create a stopword list in both English and Italian, with a few additional custom entries:
+
+```
+stopwords_list_inputs = {
+    "languages": ["english","italian"],
+    "stopwords_list": ["test","test"]  
+}
+stopwords_list_results = kiara.run_job('topic_modelling.stopwords_list', inputs=stopwords_list_inputs, comment= " ")
+stopwords_list_results
+```
+
+The result is a combined list of stopwords that will be used in the next step to filter your tokenized texts.
+
+### Remove stopwords from the tokens
+
+Now that you have a stopword list, you can remove those words from your preprocessed tokens using the operation `topic_modelling.remove_stopwords`.
+
+Run the following:
+
+```
+remove_stopwords_inputs = {
+    "tokens_array": preprocess_tokens_results['tokens_array'],
+    "stopwords_list": stopwords_list_results["stopwords_list"] 
+}
+remove_stopwords_results = kiara.run_job('topic_modelling.remove_stopwords', inputs=remove_stopwords_inputs, comment= " ")
+remove_stopwords_results
+```
+
+This returns a cleaned array of tokens, free from common and custom stopwords. These filtered tokens are now ready to be used in the topic modeling stage.
+
+## Create bigrams
+
+To improve the coherence of your topic modeling results, you can create bigrams from your preprocessed and stopword-filtered tokens. This step helps detect commonly co-occurring word pairs, _"digital\_humanities"_, and treats them as single tokens in the topic modeling process.
+
+To generate bigrams, run the following command:
+
+```
+bigrams_inputs = {
+    "tokens_array": remove_stopwords_results['tokens_array'],
+    "min_count": 3,
+}
+bigrams_results = kiara.run_job('topic_modelling.get_bigrams', inputs=bigrams_inputs, comment= " ")
+bigrams_results
+```
+
+This operation uses the `topic_modelling.get_bigrams` module and accepts optional parameters such as `min_count` (minimum frequency of token pairs) and `threshold` (a score threshold for forming phrases, through not provided in the code above). The output is a token array containing the generated bigrams.
+
+## Topic modeling with LDA
+
+After generating bigrams, you can proceed to apply Latent Dirichlet Allocation (LDA) to detect latent thematic structures in the corpus. kiara provides two module options for LDA:
+
+### LDA Multicore
+
+The `topic_modelling.lda` module wraps Gensim’s `LdaMulticore` implementation and is generally faster on multicore machines than the standard LDA implementation. However, it does not expose all LDA parameters.
+
+To run LDA using the multicore implementation, use the following code:
+
+```
+lda_inputs = {
+    "tokens_array": bigrams_results['tokens_array'],
+    "num_topics": 3,
+    "passes": 20,
+    "chunksize": 30 
+}
+lda_results = kiara.run_job('topic_modelling.lda', inputs=lda_inputs, comment= " ")
+lda_results
+```
+
+The results include the top 15 most frequent words and the generated topics.
+
+### LDA with extended parameters
+
+For more flexibility, you can use the `topic_modelling.lda_extended_params` module, which allows configuration of additional parameters such as alpha/eta tuning, topic coherence methods, and minimum topic probability thresholds.
+
+To run this version, use:
+
+```
+lda_ext_params_inputs = {
+    "tokens_array": bigrams_results['tokens_array'],
+    "passes": 20,
+    "chunksize": 30,
+    "num_topics": 3,
+    "alpha": True,
+    "eta": True,
+}
+lda_ext_params_results =  kiara.run_job('topic_modelling.lda_extended_params', inputs=lda_ext_params_inputs, comment= " ")
+lda_ext_params_results
+```
+
+The output includes:
+
+* `most_common_words`: Top frequent tokens across the corpus.
+* `print_topics`: A list of generated topic descriptions.
+* `top_topics`: Topic descriptions with coherence scores.
+
+To trace the entire pipeline—from importing your local file to tokenization, stopword removal, bigram creation, and finally LDA—you can inspect the **lineage** of the result:
+
+```
+lda_results['print_topics'].lineage
+```
+
+This command returns a detailed tree structure showing how the output was generated. It includes every kiara operation used, along with their parameters and input/output relationships. This is particularly useful for:
+
+* Debugging or validating each stage of processing
+* Reproducing or modifying specific parts of the pipeline
+* Documenting your research for transparency and reuse
+
+### Test model coherence depending on the number of topics <a href="#id-5.3.-test-model-coherence-depending-on-number-of-topics" id="id-5.3.-test-model-coherence-depending-on-number-of-topics"></a>
+
+To compare how well different LDA models fit your data depending on the number of topics, use the `topic_modelling.lda_coherence` operation.
+
+This module allows you to test multiple topic numbers and returns:
+
+* **Coherence scores** for each model, which give a quantitative estimate of how interpretable or semantically consistent the topics are.
+* The corresponding **printout of topics** for each number of topics tested.
+
+Run the following to evaluate model coherence across two different topic numbers:
+
+```
+lda_coherence_inputs = {
+    "tokens_array": bigrams_results['tokens_array'],
+    "num_topics_list": [2,5],
+    "passes": 20,
+    "chunksize": 30,
+    "num_topics": 3,
+    "alpha": True,
+    "eta": True,
+}
+lda_coherence_results =  kiara.run_job('topic_modelling.lda_coherence', inputs=lda_coherence_inputs, comment= " ")
+lda_coherence_results
+```
+
+The `coherence_scores` helps you choose the optimal number of topics for interpretation, while the `print_topics` output displays topic-word distributions.
