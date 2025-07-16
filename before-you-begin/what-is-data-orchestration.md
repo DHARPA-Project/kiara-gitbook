@@ -4,7 +4,7 @@ Data orchestration is the process of managing and conducting data-related tasks.
 
 ### From Sources to Data
 
-Historical sources don't arrive as neatly structured data. Letters, census records, newspapers, and other primary sources must be transformed into machine-readable formats before computational analysis becomes possible. This transformation process, in which you _create_ your dataset, involves critical decisions that shape your research outcomes. Yet many digital tools obscure that process. When you simply click through software interfaces, you may lose sight of how your sources become data, how that data is manipulated, and ultimately how your interpretations relate to the original materials.
+Historical sources don't arrive as neatly structured data. Letters, census records, newspapers, and other primary sources must be transformed into machine-readable formats before computational analysis becomes possible. This transformation process, in which you _create_ your dataset, involves critical decisions that shape your research outcomes – yet many digital tools obscure that process. When you simply click through software interfaces, you may lose sight of how your sources become data, how that data is manipulated, and ultimately how your interpretations relate to the original materials.
 
 ### Data Orchestration, documented
 
