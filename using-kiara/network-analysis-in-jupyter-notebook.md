@@ -1,50 +1,14 @@
 # Network analysis in jupyter notebook
 
-Before you run any notebook, you will need to install kiara on your computer.&#x20;
+## Activate your chosen kiara environment
 
-This process is quite manageable, and I will walk you through it step by step.
-
-You will need:
-
-* a tool called **conda** or **miniconda** for managing Python and dependencies
-* a special **environment** where kiara will live
-* the **kiara** software itself, plus a few plugins
-
-## Install conda (or miniconda)
-
-**Conda** is a popular tool that helps you manage different versions of Python and software libraries. If you already have Conda (or Miniconda) installed, you can skip this step.
-
-If not:
-
-* Go to the Miniconda [download page](https://www.anaconda.com/docs/getting-started/miniconda/main).
-* Download the version that matches your computer (Windows, macOS, or Linux).
-* Follow the instructions to install it.
-
-\*Double-check that you choose the correct version for your operating system and architecture (most modern computers use the 64-bit version).
-
-## Create a kiara environment
-
-Once Conda is installed, open your **Terminal** (on Mac or Linux) or **Command Line Interface (CLI)** (on Windows).
-
-You are now going to create a special **environment** just for kiara. This is like giving kiara its own room, so that it will not interfere with other tools or projects on your computer.
-
-Type this command:
-
-```
-conda create -n kiara_testing python jupyter
-```
-
-This creates an environment called `kiara_testing` and installs a recent version of Python and **Jupyter Notebook** (the tool you will use to run the notebooks).
-
-You can replace `kiara_testing` with any name you like for your environment.
-
-## Activate the envrionment
-
-Next, tell Conda that you want to activate this new environment:
+As you have seen in the install instructions, you need to create special environments for kiara to run in. Use the following command to activate an environment, replacing `kiara_testing`  with the name of your chosen environment:
 
 ```
 conda activate kiara_testing
 ```
+
+> Tip: to check what environments you have created in the past, you can use `conda env list`
 
 ## Install kiara
 
