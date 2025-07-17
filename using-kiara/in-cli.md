@@ -1,5 +1,7 @@
 # in CLI
 
+For those users comfortable working from the CLI instead of Jupyter notebooks, here is some general-level guidance to get you started using kiara:
+
 ### Import your data
 
 Import the .csv file(s) you want to analyse:
@@ -12,7 +14,7 @@ kiara run import.local.file path=/<full path to your .csv> -s file=<file alias> 
 
 `-s` saves your imported file in the kiara environment, allowing you to call upon it later using the assigned alias.
 
-Tracking your steps through comments is a fundamental aspect of using _kiara_, so don't forget to include an accurate description after `-c` , as done here with `importing_data` .
+Tracking your steps through comments is a fundamental aspect of using kiara, so don't forget to include an accurate description after `-c` , as done here with `importing_data` .
 
 ### Choose and run modules
 
@@ -30,7 +32,7 @@ kiara operation explain <module ID>
 
 This will provide you with documentation on that operation (i.e. what it does), the inputs it requires or allows, and the outputs it creates. The field names provided here – for inputs and outputs – are vital knowledge for running modules, given that:
 
-To run any module, you use:
+To run any module, use:
 
 {% code overflow="wrap" %}
 ```
