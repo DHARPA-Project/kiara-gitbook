@@ -1,5 +1,15 @@
 # Topic modeling in Jupyter
 
+## Topic modeling with kiara
+
+Now let's move onto another form of digital analysis possible using kiara: **topic modeling.**
+
+## Why topic modeling?
+
+This analytical tool works best with large collections of unstructured text (i.e., without any machine-readable annotations) and when the main purpose is to obtain a general overview of the topics discussed in a corpus. A topic is understood as a set of terms that occur together in a statistically significant way to form a cluster of words and, as long as it is unstructured, the corpus can be just about anything (e.g., emails, newspapers' headlines, newspapers' articles, a standard .txt document). For this, TM is an excellent distant reading technique that may be used as a data exploration method, for instance to categorise documents within a collection without having to read them all. Its potential, however, is most fully reached when working in tandem with expert knowledge.
+
+There are many variations of the TM algorithm and numerous programs and techniques to implement them. The rationale behind all of them, however, is the same: using statistical modelling to discover topics in a textual collection. Among these very many techniques, Latent Dirichlet Allocation (LDA - [Blei, Ng and Jordan 2003](http://www.jmlr.org/papers/volume3/blei03a/blei03a.pdf)) is perhaps the most widely used. Kiara uses Gensim, which is one way of using LDA with Python.
+
 ## Activate your kiara environment
 
 Using a new CLI window, type the following to activate your previously created kiara environment (replacing `kiara_explore` with whatever name you assigned it):
