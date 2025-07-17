@@ -31,48 +31,24 @@ Activate the conda environment:&#x20;
 conda activate kiara_explore
 ```
 
-### Dependencies
-
-Use conda to install the necessary packages. For the network analysis modules, you will need networkx:&#x20;
-
-```⏎
-conda install networkx
-```
-
-For the topic modelling modules, you will need...
-
 ### Install kiara and its plugins
 
-Use pip to install _kiara_:
+Kiara is installed using a package-management system for Python called `pip`. Simply use:
 
 ```⏎
 pip install kiara
 ```
 
-The installation may take a few minutes. Once complete, install _kiara's_ plugins:
+The installation may take a few minutes. Once complete, install kiara's plugins:
 
 ```
 pip install kiara_plugin.core_types kiara_plugin.onboarding kiara_plugin.tabular
 ```
 
-> Tip: to check which version of _kiara_ or any of its plugins are installed at any point, use `pip list | grep kiara`&#x20;
+These plugins provide support for:
 
-### Install relevant git repository
+* core data types
+* helpful onboarding tools
+* tabular data (spreadsheets, CSVs, etc.)
 
-For the network analysis modules, use:
-
-```⏎
-pip install git+https://github.com/...
-```
-
-For the topic modelling modules, use:
-
-```⏎
-pip install git+https://github.com/...
-```
-
-To check that the modules are successfully installed and see what operations are possible, use:
-
-```⏎
-kiara operation list
-```
+> Tip: to check which version of kiara or any of its plugins are installed at any point, use `pip list | grep kiara`&#x20;
