@@ -10,18 +10,20 @@ description: >-
 
 If you haven't already, install the latest versions of:
 
-* miniconda
-* Git
+* [miniconda](https://www.anaconda.com/docs/getting-started/miniconda/main) (a tool for managing Python and dependencies)
+* [Git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git) (a version control system)
 
 > Tip: We recommend using Homebrew or another package manager for installing these.
 
 ### Creating and activating an environment
 
-Open a new Terminal window and create an environment to install _kiara_ into. For example:
+Open a new Terminal window and create an environment to install kiara into. This is like giving kiara its own room, so that it will not interfere with other tools or projects on your computer. For example:
 
 ```⏎
 conda create -n kiara_explore
 ```
+
+You can replace `kiara_explore` with any name you choose for your environment.
 
 Activate the conda environment:&#x20;
 
