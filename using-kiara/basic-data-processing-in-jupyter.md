@@ -2,7 +2,7 @@
 
 ## Activate your kiara environment
 
-As you have seen in the install instructions, you need to create a special environment for kiara to run in. Use the following command to activate your previously created kiara environment, replacing `kiara_explore` with whatever name you assigned it:
+As you have seen in the install instructions, you need to create a special [environment](https://docs.anaconda.com/working-with-conda/environments/) for kiara to run in. Use the following command to activate your previously created kiara environment, replacing `kiara_explore` with whatever name you assigned it:
 
 ```
 conda activate kiara_explore
