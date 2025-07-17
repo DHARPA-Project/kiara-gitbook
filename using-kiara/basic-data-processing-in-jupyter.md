@@ -42,15 +42,7 @@ kiara = KiaraAPI.instance()
 
 ## Create a project context
 
-In kiara, a **context** is your project space. It stores:
-
-* the data you import or create
-* the operations you run
-* your notes and decisions
-
-A default context is always available, but you can also create your own for specific projects.&#x20;
-
-To create and use a **new context** called `project1_DP`, run the following code:
+In kiara, a [**context**](../before-you-begin/key-concepts.md#context) is your project space. To create and use a **new context** called `project1_DP`, run the following code:
 
 ```
 kiara.set_active_context(context_name='project1_DP', create=True)
@@ -59,9 +51,7 @@ print('Available Contexts:', kiara.list_context_names())
 print('Current Context:', kiara.get_current_context_name())
 ```
 
-This operation will also show all your available contexts and confirm which one is currently active.
-
-The output will be something like:&#x20;
+This operation will also show all your available contexts and confirm which one is currently active. The output will be something like:&#x20;
 
 ```
 Available Contexts: ['default', 'project1_DP']

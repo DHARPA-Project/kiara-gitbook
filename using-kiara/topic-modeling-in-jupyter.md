@@ -1,113 +1,28 @@
-# Topic modeling in jupyter notebook
+# Topic modeling in Jupyter
 
-Before you run any notebook, you will need to install kiara on your computer.&#x20;
+## Activate your kiara environment
 
-This process is quite manageable, and I will walk you through it step by step.
-
-You will need:
-
-* a tool called **conda** or **miniconda** for managing Python and dependencies
-* a special **environment** where kiara will live
-* the **kiara** software itself, plus a few plugins
-
-## Install conda (or miniconda)
-
-**Conda** is a popular tool that helps you manage different versions of Python and software libraries. If you already have Conda (or Miniconda) installed, you can skip this step.
-
-If not:
-
-* Go to the Miniconda [download page](https://www.anaconda.com/docs/getting-started/miniconda/main).
-* Download the version that matches your computer (Windows, macOS, or Linux).
-* Follow the instructions to install it.
-
-\*Double-check that you choose the correct version for your operating system and architecture (most modern computers use the 64-bit version).
-
-## Create a kiara environment
-
-Once Conda is installed, open your **Terminal** (on Mac or Linux) or **Command Line Interface (CLI)** (on Windows).
-
-You are now going to create a special **environment** just for kiara. This is like giving kiara its own room, so that it will not interfere with other tools or projects on your computer.
-
-Type this command:
+Using a new CLI window, type the following to activate your previously created kiara environment (replacing `kiara_explore` with whatever name you assigned it):
 
 ```
-conda create -n kiara_testing python jupyter
+conda activate kiara_explore
 ```
 
-This creates an environment called `kiara_testing` and installs a recent version of Python and **Jupyter Notebook** (the tool you will use to run the notebooks).
+If kiara's project [contexts](../before-you-begin/key-concepts.md#context) are not enough for your purposes (e.g. you want completely isolated dependency management for reproducibility), then you can also create separate environments for different kiara projects. Simply go back to these [instructions](../installation/mac.md#creating-and-activating-an-environment) if you have forgotten how.
 
-You can replace `kiara_testing` with any name you like for your environment.
+> Tip: to check what environments you have created in the past, you can use `conda env list`
 
-## Activate the envrionment
+## Dependencies
 
-Next, tell Conda that you want to activate this new environment:
-
-```
-conda activate kiara_testing
-```
-
-## Install kiara
-
-Now that your environment is set up, let's install **kiara** iteself.&#x20;
-
-kiara is installed using a package-management system for Python called `pip`. Just type:
-
-```
-pip install kiara
-```
-
-The first installation may take a few minutes. That is normal.
-
-## Install kiara plugins
-
-To make kiara more useful, you will also install some basic **plugins** by running:&#x20;
-
-```
-pip install kiara_plugin.core_types kiara_plugin.onboarding kiara_plugin.tabular 
-```
-
-These plugins provide support for:
-
-* core data types
-* helpful onboarding tools
-* tabular data (spreadsheets, CSVs, etc.)
-
-To see which versions of kiara and its plugins are installed, you can run:
-
-```
-pip list | grep kiara
-```
-
-At the time of writing, the versions installed are:
-
-```
-kiara                     0.5.13
-kiara_plugin.core_types   0.5.2
-kiara_plugin.onboarding   0.5.2
-kiara_plugin.tabular      0.5.6
-```
-
-## Install the topic modeling package
-
-To install the **topic modeling package**, run:
+You already installed some basic plugins when setting up your kiara environment, and you installed Jupyter notebook and Observable when completing [Basic data processing in Jupyter](basic-data-processing-in-jupyter.md). Now you should install the necessary packages for topic modeling, too. Run:
 
 ```
 pip install git+https://github.com/DHARPA-Project/kiara_plugin.topic_modelling
 ```
 
-Alternatively, you can run:&#x20;
+> Tip: to check what packages are already installed in your environment, use `conda list`
 
-```
-! pip install git+https://github.com/DHARPA-Project/kiara_plugin.topic_modelling
-```
-
-**Note**: For visualization operations, also install:
-
-```
-pip install observable_jupyter
-```
-
-## Start Jupyter notebook
+## Open Jupyter notebook and set up kiara API
 
 To open the Jupyter interface, run:
 
@@ -115,19 +30,33 @@ To open the Jupyter interface, run:
 jupyter notebook
 ```
 
-## Import kiara and create an API
-
-Now that kiara and its plugins are installed, let's set up `kiaraAPI`.
-
-To start using kiara in Jupyter Notebook, you first need to create a `kiaraAPI` **instance**. This instance allows us to control kiara and see what operations are available.&#x20;
-
-To set this up, run the following code in a notebook cell:
+To use kiara in Jupyter Notebook, you first need to create a `kiaraAPI` **instance**. This instance allows us to control kiara and see what operations are available. Run the following code in a notebook cell:
 
 ```
 from kiara.api import KiaraAPI
 
 kiara = KiaraAPI.instance()
 ```
+
+## Create a project context
+
+As you saw earlier, kiara uses different [**contexts**](../before-you-begin/key-concepts.md#context) for specific projects. To create and use a **new context** for your topic modelling project, e.g. `project3_TM,` run the following code:
+
+```
+kiara.set_active_context(context_name='project3_TM', create=True)
+
+print('Available Contexts:', kiara.list_context_names())
+print('Current Context:', kiara.get_current_context_name())
+```
+
+This operation will also show all your available contexts and confirm which one is currently active. The output will be something like:&#x20;
+
+```
+Available Contexts: ['default', 'project1_DP', 'project2_NA', 'project3_TM']
+Current Context: project3_TM
+```
+
+This confirms that your new context is set up and ready to use.&#x20;
 
 ## Data onboarding
 

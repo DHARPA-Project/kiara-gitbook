@@ -31,3 +31,11 @@ A workflow in kiara represents your entire research process, potentially consist
 Lineage (or data ancestry) is kiara's record of how data values are created and transformed throughout your research process. When you request the lineage of a data object (using a command like `<kiara data explain --lineage [object_name]>`), kiara provides a comprehensive history showing all the modules and inputs that contributed to creating that object.
 
 For example, requesting the lineage of a network graph might show that it was first created from an edges table and later augmented with additional node attributes from a separate data source. This lineage documentation is crucial for understanding data provenance, ensuring research transparency, and enabling critical reflection on methodological choices.
+
+## Context
+
+Kiara has a default context which is always available, but users can also create different contexts within their virtual environment for each project they undertake with kiara. Each context stores:
+
+* the data you import or create
+* the operations you run
+* your notes and decisions

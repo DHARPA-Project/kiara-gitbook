@@ -1,25 +1,5 @@
 # Network analysis in Jupyter
 
-## Activate your chosen kiara environment
-
-As you have seen in the install and data processing instructions, you need to create special environments for kiara to run in. Use the following command to activate your chosen kiara environment for doing network analysis, replacing `kiara_NA_testing`  with whatever name you have assigned it:
-
-```
-conda activate kiara_NA_testing
-```
-
-> Tip: to check what environments you have created in the past, you can use `conda env list`
-
-## Dependencies
-
-You will have already installed some basic plugins when setting up your kiara environment. Now you can use conda to install the necessary packages for using kiara in Jupyter notebooks for network analysis, too.
-
-You'll be using Jupyter notebook, Observable, and networkx, so enter:
-
-```
-conda install jupyter observable_jupyter
-```
-
 ## Network analysis with kiara
 
 Now that you are comfortable with what kiara looks like and what it can do to help track your data and your research process, let's try out some of the digital analysis tools, starting with **network analysis**.
@@ -32,9 +12,37 @@ Doing this digitally, and **at scale**, enables you to ask questions of large da
 
 This tutorial is not a deep dive into network theory or its applications in the humanities. Rather, you will focus on how using kiara helps you structure your workflow, document your decisions, and trace the transformations your data undergoes during analysis.
 
-## Get started
+## Activate your kiara environment
 
-Before you begin, you will check that the necessary plugins are available and set up the `kiaraAPI`, the interface that allows us to run kiara commands inside your Jupyter notebook.
+As you have seen in the install instructions, you need to create a special environment for kiara to run in. Using a new CLI window, type the following to activate your previously created kiara environment (replacing `kiara_explore` with whatever name you assigned it):
+
+```
+conda activate kiara_explore
+```
+
+> Tip: to check what environments you have created in the past, you can use `conda env list`
+
+## Dependencies
+
+You already installed some basic plugins when setting up your kiara environment, and you installed Jupyter notebook and Observable when completing [Basic data processing in Jupyter](basic-data-processing-in-jupyter.md). Now you should install the necessary packages for network analysis, too.
+
+You'll be using networkx, so enter:
+
+```
+conda install networkx
+```
+
+> Tip: to check what packages are already installed in your environment, use `conda list`
+
+## Open Jupyter notebook and set up the kiaraAPI
+
+To open the Jupyter interface, run:
+
+```
+jupyter notebook
+```
+
+Now we need to set up the `kiaraAPI`, the interface that allows us to run kiara commands inside your Jupyter notebook.
 
 Here is the code to get started:
 
@@ -44,6 +52,26 @@ import os
 from kiara.api import KiaraAPI
 kiara = KiaraAPI.instance()
 ```
+
+## Create a project context
+
+As you saw in the [previous section](basic-data-processing-in-jupyter.md), kiara uses different [**contexts**](../before-you-begin/key-concepts.md#context) for specific projects. To create and use a **new context** for your network analysis project, e.g. `project2_NA,` run the following code:
+
+```
+kiara.set_active_context(context_name='project2_NA', create=True)
+
+print('Available Contexts:', kiara.list_context_names())
+print('Current Context:', kiara.get_current_context_name())
+```
+
+This operation will also show all your available contexts and confirm which one is currently active. The output will be something like:&#x20;
+
+```
+Available Contexts: ['default', 'project1_DP', 'project2_NA']
+Current Context: project2_NA
+```
+
+This confirms that your new context is set up and ready to use.&#x20;
 
 ## Set up your data path
 

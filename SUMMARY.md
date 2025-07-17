@@ -18,7 +18,6 @@
 * [Network analysis in Jupyter](using-kiara/network-analysis-in-jupyter.md)
 * [Topic modeling in Jupyter](using-kiara/topic-modeling-in-jupyter.md)
 * [in CLI](using-kiara/in-cli.md)
-* [Use case](using-kiara/use-case.md)
 
 ## Customisation
 

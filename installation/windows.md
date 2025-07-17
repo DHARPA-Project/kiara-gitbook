@@ -17,7 +17,7 @@ If you haven't already, install the latest versions of:
 
 ### Creating and activating an environment
 
-Open Command Prompt or PowerShell and create an environment to install kiara into. This is like giving kiara its own room, so that it will not interfere with other tools or projects on your computer. For example:
+Open your Command Line Interface and create an environment to install kiara into. This is like giving kiara its own room, so that it will not interfere with other tools or projects on your computer. For example:
 
 ```⏎
 conda create -n kiara_explore
