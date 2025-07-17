@@ -31,7 +31,7 @@ Activate the conda environment:&#x20;
 conda activate kiara_explore
 ```
 
-### Install kiara and its plugins
+### Install kiara and its basic plugins
 
 Kiara is installed using a package-management system for Python called `pip`. Simply use:
 

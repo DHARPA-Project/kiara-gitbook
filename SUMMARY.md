@@ -14,9 +14,9 @@
 
 ## Using kiara
 
-* [Data processing in Jupyter notebook](using-kiara/data-processing-in-jupyter-notebook.md)
-* [Network analysis in Jupyter notebook](using-kiara/network-analysis-in-jupyter-notebook.md)
-* [Topic modeling in Jupyter notebook](using-kiara/topic-modeling-in-jupyter-notebook.md)
+* [Basic data processing in Jupyter](using-kiara/basic-data-processing-in-jupyter.md)
+* [Network analysis in Jupyter](using-kiara/network-analysis-in-jupyter.md)
+* [Topic modeling in Jupyter](using-kiara/topic-modeling-in-jupyter.md)
 * [in CLI](using-kiara/in-cli.md)
 * [Use case](using-kiara/use-case.md)
 

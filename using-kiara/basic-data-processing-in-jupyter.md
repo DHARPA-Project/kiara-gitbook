@@ -1,23 +1,23 @@
-# Data processing in Jupyter notebook
+# Basic data processing in Jupyter
 
-## Activate your chosen kiara environment
+## Activate your kiara environment
 
-As you have seen in the install instructions, you need to create special environments for kiara to run in. Use the following command to activate your chosen kiara environment, replacing `kiara_testing`  with the name you assigned it:
+As you have seen in the install instructions, you need to create a special environment for kiara to run in. Use the following command to activate your previously created kiara environment, replacing `kiara_explore` with whatever name you assigned it:
 
 ```
-conda activate kiara_testing
+conda activate kiara_explore
 ```
 
 > Tip: to check what environments you have created in the past, you can use `conda env list`
 
 ## Dependencies
 
-You will have already installed some basic plugins when setting up your kiara environment. Now you can use conda to install the necessary packages for using kiara in Jupyter notebooks, too.
+You already installed some basic plugins when setting up your kiara environment. Now you can use conda to also install the necessary packages for using kiara in Jupyter notebooks.
 
 You'll be using Jupyter notebook and Observable within that notebook, so enter:
 
 ```
-conda install jupyter observable_jupyter networkx
+conda install jupyter observable_jupyter
 ```
 
 ## Start Jupyter notebook
@@ -50,10 +50,10 @@ In kiara, a **context** is your project space. It stores:
 
 A default context is always available, but you can also create your own for specific projects.&#x20;
 
-To create and use a **new context** called `hello_kiara` , run the following code:
+To create and use a **new context** called `project1_DP`, run the following code:
 
 ```
-kiara.set_active_context(context_name='hello_kiara', create=True)
+kiara.set_active_context(context_name='project1_DP', create=True)
 
 print('Available Contexts:', kiara.list_context_names())
 print('Current Context:', kiara.get_current_context_name())
@@ -64,8 +64,8 @@ This operation will also show all your available contexts and confirm which one 
 The output will be something like:&#x20;
 
 ```
-Available Contexts: ['default', 'hello_kiara']
-Current Context: hello_kiara
+Available Contexts: ['default', 'project1_DP']
+Current Context: project1_DP
 ```
 
 This confirms that your new context is set up and ready to use.&#x20;

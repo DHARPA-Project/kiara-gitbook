@@ -1,6 +1,24 @@
-# Network analysis in Jupyter notebook
+# Network analysis in Jupyter
 
-##
+## Activate your chosen kiara environment
+
+As you have seen in the install and data processing instructions, you need to create special environments for kiara to run in. Use the following command to activate your chosen kiara environment for doing network analysis, replacing `kiara_NA_testing`  with whatever name you have assigned it:
+
+```
+conda activate kiara_NA_testing
+```
+
+> Tip: to check what environments you have created in the past, you can use `conda env list`
+
+## Dependencies
+
+You will have already installed some basic plugins when setting up your kiara environment. Now you can use conda to install the necessary packages for using kiara in Jupyter notebooks for network analysis, too.
+
+You'll be using Jupyter notebook, Observable, and networkx, so enter:
+
+```
+conda install jupyter observable_jupyter
+```
 
 ## Network analysis with kiara
 
