@@ -18,7 +18,7 @@ Using a new CLI window, type the following to activate your previously created k
 conda activate kiara_explore
 ```
 
-If kiara's project [contexts](../before-you-begin/key-concepts.md#context) are not enough for your purposes (e.g. you want completely isolated dependency management for reproducibility), then you can also create separate environments for different kiara projects. Simply go back to these [instructions](../installation/mac.md#creating-and-activating-an-environment) if you have forgotten how.
+You can also create separate [environments](../installation/mac.md#creating-and-activating-an-environment) for different kiara projects if you want – but keep in mind that your kiara contexts will be available across all environments.
 
 > Tip: to check what environments you have created in the past, you can use `conda env list`
 
