@@ -1,6 +1,6 @@
 # Tips for beginners
 
-## What you need to know before using Kiara
+## What you need to know
 
 Kiara is a powerful tool for data processing and analysis, but it assumes you have certain foundational skills. This page will help you understand what you need to know and where to learn these skills if you're just starting out with digital humanities methods.
 
