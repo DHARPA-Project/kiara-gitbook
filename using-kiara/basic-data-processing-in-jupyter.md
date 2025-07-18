@@ -68,26 +68,9 @@ Now, you can explore the tools kiara offers. To view a list of all available **o
 kiara.list_operation_ids()
 ```
 
-This will return a list of operations, like:
+This will return a list of operations:
 
-```
-['assemble.network_graph',
- 'assemble.tables',
- 'calculate.betweenness_score',
- 'calculate.closeness_score',
- 'calculate.degree_score',
- 'calculate.eigenvector_score',
- 'compute.modularity_group',
- 'create.cut_point_list',
- 'create.database.from.file',
- 'create.database.from.file_bundle',
- 'create.database.from.table',
- 'create.database.from.tables',
- 'create.job_log',
- 'create.network_graph.from.file',
- 'create.table.from.file'
- ...]
-```
+<figure><img src="../.gitbook/assets/Screenshot 2025-07-18 at 13.51.36.png" alt=""><figcaption><p>Partial view of the Operations list</p></figcaption></figure>
 
 Each **operation** is a task you can perform in kiara, such as creating a table, calculating network metrics, or exporting files.&#x20;
 
