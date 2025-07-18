@@ -30,7 +30,7 @@ jupyter notebook
 
 ## Import kiara and create an API
 
-To start using kiara in Jupyter Notebook, you first need to create a `kiaraAPI` **instance**. This instance allows us to control kiara and see what operations are available.&#x20;
+Open a new notebook using the option on the top right of the Jupyter interface. Now, to start using kiara in Jupyter Notebook, you first need to create a `kiaraAPI` **instance**. This instance allows us to control kiara and see what operations are available.&#x20;
 
 To set this up, run the following code in a notebook cell:
 
@@ -70,7 +70,7 @@ kiara.list_operation_ids()
 
 This will return a list of operations:
 
-<figure><img src="../.gitbook/assets/Screenshot 2025-07-18 at 13.51.36.png" alt=""><figcaption><p>Partial view of the Operations list</p></figcaption></figure>
+<figure><img src="../.gitbook/assets/Screenshot 2025-07-18 at 17.45.33.png" alt=""><figcaption><p>Partial view of the returned operations list</p></figcaption></figure>
 
 Each **operation** is a task you can perform in kiara, such as creating a table, calculating network metrics, or exporting files.&#x20;
 

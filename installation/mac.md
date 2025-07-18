@@ -25,7 +25,7 @@ conda create -n kiara_explore
 
 You can replace `kiara_explore` with any name you choose for your environment.
 
-Activate the conda environment:&#x20;
+Proceed by typing `y` and hitting enter, before activating the conda environment using:
 
 ```⏎
 conda activate kiara_explore
@@ -33,7 +33,13 @@ conda activate kiara_explore
 
 ### Install kiara and its basic plugins
 
-Kiara is installed using a package-management system for Python called `pip`. Simply use:
+Kiara is installed using a package-management system for Python called `pip`. To install pip into your environment, use:
+
+```
+conda install pip
+```
+
+Then:
 
 ```⏎
 pip install kiara
