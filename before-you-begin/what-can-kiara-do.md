@@ -11,3 +11,5 @@ description: 'Kiara enables digital humanities researchers to:'
 * **Share and collaborate**: Create modular components that can be shared with other researchers, enabling collaborative development of digital humanities methodologies.
 
 Kiara particularly excels at the preparation, transformation, and initial analysis stages of research, providing fine-grained control over processes that are often hidden inside "black box" tools. By encouraging transparency and traceability, it helps researchers maintain and share their critical thinking as they leverage computational methods.
+
+<figure><img src="../.gitbook/assets/Quick sheets - page 5.png" alt=""><figcaption></figcaption></figure>
