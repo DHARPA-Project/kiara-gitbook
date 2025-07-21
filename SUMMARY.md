@@ -19,10 +19,10 @@
 * [Topic modeling in Jupyter](using-kiara/topic-modeling-in-jupyter.md)
 * [in CLI](using-kiara/in-cli.md)
 
-## Customisation
+## Extending kiara
 
-* [Creating modules](customisation/creating-modules.md)
-* [Creating pipelines](customisation/creating-pipelines.md)
+* [Creating modules](extending-kiara/creating-modules/the-basics.md)
+* [Creating pipelines](extending-kiara/pipelines/assemble-pipelines.md)
 
 ## Troubleshooting
 
