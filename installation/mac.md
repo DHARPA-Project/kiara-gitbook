@@ -58,3 +58,5 @@ These plugins provide support for:
 * tabular data (spreadsheets, CSVs, etc.)
 
 > Tip: to check which version of kiara or any of its plugins are installed at any point, use `pip list | grep kiara`&#x20;
+
+<figure><img src="../.gitbook/assets/grep kiara output.png" alt=""><figcaption><p>Example output for  <code>pip list | grep kiara</code> </p></figcaption></figure>
