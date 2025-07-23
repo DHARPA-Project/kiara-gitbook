@@ -10,4 +10,4 @@ Historical sources don't arrive as neatly structured data. Letters, census recor
 
 Kiara therefore allows you to both perform and track each of those steps. Rather than processing your data through monolithic "black box" tools, kiara facilitates the creation of data [pipelines](key-concepts.md#pipeline) that consist of distinct, interconnected [modules](key-concepts.md#module). Each module has clearly defined inputs, outputs, and processes, allowing you to understand exactly what is happening to your data at each step. At the same time, kiara automatically tracks the ancestry of your data through every transformation. At any point, you can see the [lineage](key-concepts.md#lineage) of how a particular dataset was created, including all the inputs and processes involved, making your [workflow](key-concepts.md#workflow) and findings both explainable and reproducible.
 
-<figure><img src="../.gitbook/assets/kiara illuminates.png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/Kiara documentation - page 8.png" alt=""><figcaption></figcaption></figure>
