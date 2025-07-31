@@ -1,6 +1,6 @@
 # What is kiara?
 
-_Kiara_ is a **data orchestration tool** designed for digital humanities researchers who want to maintain a critically aware relationship with their sources and data. Developed by the **DHARPA project** (Digital History Advanced Research Projects Accelerator) at the Luxembourg Centre for Contemporary and Digital History, kiara addresses a fundamental challenge in digital humanities: how to preserve scholarly agency and critical engagement when using computational methods
+_Kiara_ is a **data orchestration tool** designed for digital humanities researchers who want to maintain a critically aware relationship with their sources and data. Developed by the **DHARPA project** (Digital History Advanced Research Projects Accelerator) at the Luxembourg Centre for Contemporary and Digital History, kiara addresses a fundamental challenge in digital humanities: how to preserve scholarly agency and critical engagement when using computational methods.
 
 Unlike conventional data processing tools that often function as "black boxes," kiara is built to illuminate the research process from start to finish. It's a **Python-based** tool that combines the technical power of data [pipeline](before-you-begin/key-concepts.md#pipeline) frameworks with a strong emphasis on transparency, documentation, and critical reflection.
 
